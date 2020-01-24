@@ -1,0 +1,25 @@
+Package: basilisk.utils
+Version: 0.99.0
+Date: 2020-01-22
+Title: Basilisk Installation Utilities
+Authors@R: c(person("Aaron", "Lun", role=c("aut", "cre", "cph"),
+        email="infinite.monkeys.with.keyboards@gmail.com"))
+Imports: 
+    reticulate,
+    utils,
+    rappdirs
+Suggests:
+    knitr,
+    rmarkdown,
+    BiocStyle,
+    testthat,
+    BiocFileCache
+biocViews: Infrastructure
+Description: 
+    Implements utilities for installation of the basilisk package,
+    primarily to avoid re-writing the same R code in both the configure
+    script (for Unix installation) and in the lazy installation
+    mechanism (for MacOS or Windows installations).
+License: GPL-3
+RoxygenNote: 7.0.2
+VignetteBuilder: knitr
