@@ -34,12 +34,3 @@ getBasiliskDir <- function(mustWork=TRUE) {
 
     inst_path
 }
-
-isWindows <- function() {
-    .Platform$OS.type=="windows" 
-}
-
-isMacOSX <- function() {
-    Sys.info()[["sysname"]] == "Darwin"
-}
-
