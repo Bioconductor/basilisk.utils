@@ -18,6 +18,9 @@
 #' @seealso
 #' \code{\link{basiliskAnaconda}}, where this function is used for Windows or MacOSX.
 #' 
+#' @examples
+#' getExternalDir()
+#'
 #' @export
 #' @importFrom utils packageVersion
 #' @importFrom rappdirs user_data_dir

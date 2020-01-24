@@ -21,6 +21,10 @@ See \code{\link{installAnaconda}} for more details on how this external location
 This function will respect any setting of \code{BASILISK_EXTERNAL_DIR}, 
 see \code{?\link{installAnaconda}} for more details.
 }
+\examples{
+getExternalDir()
+
+}
 \seealso{
 \code{\link{basiliskAnaconda}}, where this function is used for Windows or MacOSX.
 }

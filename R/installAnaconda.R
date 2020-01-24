@@ -39,6 +39,11 @@
 #'  
 #' @author Aaron Lun
 #'
+#' @examples
+#' \dontrun{
+#' installAnaconda()
+#' }
+#'
 #' @export
 installAnaconda <- function() {
     dest_path <- getBasiliskDir(mustWork=FALSE)

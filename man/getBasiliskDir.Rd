@@ -21,6 +21,10 @@ the function will return it directly without modification.
 This allows users to use their own Anaconda instances with \pkg{basilisk} but, 
 in turn, they are responsible for managing it.
 }
+\examples{
+getBasiliskDir(mustWork=FALSE)
+
+}
 \author{
 Aaron Lun
 }

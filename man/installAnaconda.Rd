@@ -46,6 +46,12 @@ This may be necessary on rare occasions when running multiple R instances on the
 (Multiple instances using different Bioconductor releases pose no problem.)
 }
 
+\examples{
+\dontrun{
+installAnaconda()
+}
+
+}
 \author{
 Aaron Lun
 }

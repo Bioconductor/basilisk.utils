@@ -16,6 +16,9 @@
 #'
 #' @author Aaron Lun
 #'
+#' @examples
+#' getBasiliskDir(mustWork=FALSE)
+#'
 #' @export
 getBasiliskDir <- function(mustWork=TRUE) {
     inst_path <- Sys.getenv("BASILISK_USE_ANACONDA")

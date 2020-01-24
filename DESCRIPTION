@@ -7,6 +7,7 @@ Authors@R: c(person("Aaron", "Lun", role=c("aut", "cre", "cph"),
 Imports: 
     reticulate,
     utils,
+    methods,
     rappdirs
 Suggests:
     knitr,
