@@ -23,7 +23,8 @@ getBasiliskDir <- function(mustWork=TRUE) {
         if (isWindows() || isMacOSX()) {
             inst_path <- getExternalDir()
         } else {
-            inst_path <- system.file(package="basilisk")
+            # Can't use system.file(), basilisk isn't installed yet!
+            inst_path <- file.path(.libPaths()[1], "basilisk")
         }
         inst_path <- file.path(inst_path, .core_dir)
     }
