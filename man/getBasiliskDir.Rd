@@ -4,10 +4,10 @@
 \alias{getBasiliskDir}
 \title{Get the \pkg{basilisk} Anaconda directory}
 \usage{
-getBasiliskDir(mustWork = TRUE)
+getBasiliskDir(assume.installed = TRUE)
 }
 \arguments{
-\item{mustWork}{Logical scalar indicating whether to throw an error if the directory does not exist.}
+\item{assume.installed}{Logical scalar indicating whether we can assume the Anaconda instance is already installed.}
 }
 \value{
 String containing the path to the Anaconda instance.
@@ -20,9 +20,13 @@ If the \code{BASILISK_USE_ANACONDA} environment variable is set,
 the function will return it directly without modification.
 This allows users to use their own Anaconda instances with \pkg{basilisk} but, 
 in turn, they are responsible for managing it.
+
+If \code{assume.installed=TRUE}, this function will throw an error if the Anaconda directory does not exist.
+On Unix, it will also use \code{\link{system.file}} to ensure that the correct directory is recovered,
+even if \code{\link{.libPaths}} is altered to some other installation location.
 }
 \examples{
-getBasiliskDir(mustWork=FALSE)
+getBasiliskDir(assume.installed=FALSE)
 
 }
 \author{
