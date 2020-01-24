@@ -1,0 +1,40 @@
+---
+title: Utilities for _basilisk_ installation
+author: 
+- name: Aaron Lun
+  email: infinite.monkeys.with.keyboards@gmail.com
+date: "Revised: 15 January 2019"
+output:
+  BiocStyle::html_document
+package: basilisk.utils
+bibliography: 
+vignette: >
+  %\VignetteIndexEntry{_basilisk_ installation utilities}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}    
+---
+
+```{r, echo=FALSE, results="hide"}
+knitr::opts_chunk$set(error=FALSE, warning=FALSE, message=FALSE)
+library(basilisk.utils)
+```
+
+# Who is this package for?
+
+This document and package is strictly for the developers of `r Biocpkg("basilisk")`.
+If you are a developer of a client package, you probably want to read the `r Biocpkg("basilisk")` vignette instead.
+If you are an end-user of some client package, you are better off reading the documentation for that client instead.
+
+# Why does this package exist?
+
+This package centralizes various R functions that are required for installing `r Biocpkg("basilisk")`.
+On Unix, these functions is called via the `configure` file, while on the other operating systems,
+this is (potentially) called in `basiliskStart()` itself during run-time.
+
+Now, the problem is that we cannot put these functions inside `r Biocpkg("basilisk")` itself 
+because `configure` runs before installation!
+The naive option is to simply duplicate the code in both the package and `configure`, 
+which is unappealing as it circumvents `R CMD check`'s ability to check code quality.
+
+The `r Biocpkg("basilisk.utils")` package provides R functions that can be called in both `configure` and `basiliskStart()`.
+This allows us to avoid code duplication and enjoy the safety of `R CMD check`.
