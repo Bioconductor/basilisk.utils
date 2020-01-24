@@ -47,7 +47,7 @@
 #'
 #' @export
 installAnaconda <- function() {
-    dest_path <- getBasiliskDir(mustWork=FALSE)
+    dest_path <- getBasiliskDir(assume.installed=FALSE)
     if (file.exists(dest_path)) {
         return(NULL)
     }
