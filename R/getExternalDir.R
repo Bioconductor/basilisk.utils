@@ -16,7 +16,7 @@
 #' @author Aaron Lun
 #'
 #' @seealso
-#' \code{\link{basiliskAnaconda}}, where this function is used for Windows or MacOSX.
+#' \code{\link{getBasiliskDir}}, where this function is used for Windows or MacOSX.
 #' 
 #' @examples
 #' getExternalDir()
