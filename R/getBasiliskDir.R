@@ -7,6 +7,7 @@
 #' @param assume.installed Logical scalar indicating whether we can assume the Anaconda instance is already installed.
 #'
 #' @return String containing the path to the Anaconda instance.
+#' If \code{assume.installed=TRUE}, this function will throw an error if the expected directory does not exist.
 #'
 #' @details
 #' By default, Anaconda is installed to a location specified by \code{\link{getExternalDir}}.
@@ -18,26 +19,26 @@
 #' This allows users to use their own Anaconda instances with \pkg{basilisk} but, 
 #' in turn, they are responsible for managing it.
 #'
-#' If the \code{BASILISK_USE_PACKAGE_DIR} environment variable is set to \code{"1"},
-#' the function will return a path to a location inside the \code{basilisk} installation directory.
+#' If the \code{BASILISK_USE_SYSTEM_DIR} environment variable is set to \code{"1"},
+#' the function will return a path to a location inside the \code{basilisk} system installation directory.
 #' This is the ideal approach when installing from source as any Anaconda and \pkg{basilisk} re-installations are synchronized.
 #' It also ensures that any R process that can load \pkg{basilisk} will also have permissions to access the Anaconda instance,
 #' which makes life easier for sysadmins of clusters or other shared resources.
 #'
-#' If \code{assume.installed=TRUE}, this function will throw an error if the Anaconda directory does not exist.
-#' On Unix, it will also use \code{\link{system.file}} to ensure that the correct directory is recovered,
-#' even if \code{\link{.libPaths}} is altered to some other installation location.
-#' 
 #' @author Aaron Lun
 #'
 #' @examples
-#' getBasiliskDir(assume.installed=FALSE)
+#' # This is the only mode that works in an example,
+#' # all other modes rely on installation of basilisk.
+#' if (useSystemDir()) {
+#'     getBasiliskDir(assume.installed=FALSE)
+#' }
 #'
 #' @export
 getBasiliskDir <- function(assume.installed=TRUE) {
     inst_path <- Sys.getenv("BASILISK_EXTERNAL_ANACONDA")
     if (identical(inst_path, "")) {
-        if (!identical(Sys.getenv("BASILISK_USE_PACKAGE_DIR"), "1")) {
+        if (!useSystemDir()) {
             inst_path <- getExternalDir()
         } else {
             if (assume.installed) {
