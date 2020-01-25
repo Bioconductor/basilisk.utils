@@ -39,10 +39,9 @@ installAnaconda <- function() {
 
     version <- "2019.10"
     base_url <- "https://repo.anaconda.com/archive"
+    .clear_previous_installs(dest_path)
 
     if (isWindows()) {
-        .clear_previous_installs(dest_path)
-
         arch <- if (.Machine$sizeof.pointer == 8) "x86_64" else "x86"
         inst_file <- sprintf("Anaconda3-%s-Windows-%s.exe", version, arch)
         tmploc <- .expedient_download(file.path(base_url, inst_file))
@@ -62,8 +61,6 @@ installAnaconda <- function() {
         inst_args <- sprintf(" %s -b -p %s", tmploc, dest_path)
 
         if (is_mac) {
-            .clear_previous_installs(dest_path)
-
             # The prebuilt R binary for Mac seems to set this variable,
             # which causes default paths for zlib to be ignored and breaks
             # installation. So, we unset it before attempting installation.
@@ -98,7 +95,7 @@ installAnaconda <- function() {
 }
 
 .clear_previous_installs <- function(dest_path) {
-    if (Sys.getenv("BASILISK_NO_DESTROY")!="1") {
+    if (!useSystemDir() && Sys.getenv("BASILISK_NO_DESTROY")!="1") {
         host <- dirname(dest_path)
         major.v <- sub("\\.[0-9]+$", "", basename(host))
         all.candidates <- list.files(dirname(host), full.names=TRUE, pattern=paste0("^", major.v))

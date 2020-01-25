@@ -30,6 +30,8 @@
 #' @examples
 #' # This is the only mode that works in an example,
 #' # all other modes rely on installation of basilisk.
+#'
+#' # Sys.setenv(BASILISK_USE_SYSTEM_DIR=1)
 #' if (useSystemDir()) {
 #'     getBasiliskDir(assume.installed=FALSE)
 #' }
