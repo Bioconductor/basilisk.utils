@@ -28,14 +28,14 @@
 #' @author Aaron Lun
 #'
 #' @examples
-#' # This is the only mode that works in an example,
+#' # Setting the environment variable to run this example: 
 #' # all other modes rely on installation of basilisk.
+#' old <- Sys.getenv("BASILISK_USE_SYSTEM_DIR")
+#' Sys.setenv(BASILISK_USE_SYSTEM_DIR=1)
 #'
-#' # Sys.setenv(BASILISK_USE_SYSTEM_DIR=1)
-#' if (useSystemDir()) {
-#'     getBasiliskDir(assume.installed=FALSE)
-#' }
+#' getBasiliskDir(assume.installed=FALSE)
 #'
+#' Sys.setenv(BASILISK_USE_SYSTEM_DIR=old)
 #' @export
 getBasiliskDir <- function(assume.installed=TRUE) {
     inst_path <- Sys.getenv("BASILISK_EXTERNAL_ANACONDA")
