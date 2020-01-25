@@ -30,13 +30,14 @@ It also ensures that any R process that can load the client package will also ha
 which makes life easier for sysadmins of clusters or other shared resources.
 }
 \examples{
-# This is the only mode that works in an example,
+# Setting the environment variable to run this example: 
 # all other modes rely on installation of the client.
+old <- Sys.getenv("BASILISK_USE_SYSTEM_DIR")
+Sys.setenv(BASILISK_USE_SYSTEM_DIR=1)
 
-# Sys.setenv(BASILISK_USE_SYSTEM_DIR=1)
-if (useSystemDir()) {
-   getEnvironmentDir("client.of.basilisk", assume.installed=FALSE)
-}
+getEnvironmentDir("client.of.basilisk", assume.installed=FALSE)
+
+Sys.setenv(BASILISK_USE_SYSTEM_DIR=old)
 
 }
 \author{

@@ -31,8 +31,8 @@ This may be necessary on rare occasions when running multiple R instances on the
 }
 \examples{
 # We can't actually run installAnaconda() here, as it 
-# hard-codes installation into basilisk's directory on
-# Linux (which is desirable in the wider context).
+# either relies on basilisk already being installed or
+# it has a hard-coded path to the basilisk system dir.
 print("dummy test to pass BiocCheck")
 
 }
