@@ -37,9 +37,13 @@ installAnaconda <- function() {
         return(NULL)
     }
 
+    if (!useSystemDir() && Sys.getenv("BASILISK_NO_DESTROY")!="1") {
+        clearExternalDir()
+    }
+
     version <- "2019.10"
     base_url <- "https://repo.anaconda.com/archive"
-    .clear_previous_installs(dest_path)
+
 
     if (isWindows()) {
         arch <- if (.Machine$sizeof.pointer == 8) "x86_64" else "x86"
@@ -92,13 +96,4 @@ installAnaconda <- function() {
     }
 
     fname
-}
-
-.clear_previous_installs <- function(dest_path) {
-    if (!useSystemDir() && Sys.getenv("BASILISK_NO_DESTROY")!="1") {
-        host <- dirname(dest_path)
-        major.v <- sub("\\.[0-9]+$", "", basename(host))
-        all.candidates <- list.files(dirname(host), full.names=TRUE, pattern=paste0("^", major.v))
-        unlink(all.candidates, recursive=TRUE)
-    }
 }
