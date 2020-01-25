@@ -26,7 +26,7 @@
 #' @importFrom utils packageVersion
 #' @importFrom rappdirs user_cache_dir 
 getExternalDir <- function() {
-    pkg.v <- as.character(packageVersion("basilisk.utils"))
+    pkg.v <- as.character(packageVersion("basilisk"))
     inst_path <- Sys.getenv("BASILISK_EXTERNAL_DIR")
     if (inst_path=="") {
         # Using "cache", not "data", as it doesn't have spaces on Mac.
