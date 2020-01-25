@@ -21,6 +21,8 @@
 #'
 #' @return
 #' An Anaconda instance is created at the location specified by \code{\link{getBasiliskDir}}.
+#' Nothing is performed if the instance already exists.
+#' A logical scalar is returned indicating whether a new instance was created.
 #'  
 #' @author Aaron Lun
 #'
@@ -34,7 +36,7 @@
 installAnaconda <- function() {
     dest_path <- getBasiliskDir(assume.installed=FALSE)
     if (file.exists(dest_path)) {
-        return(NULL)
+        return(FALSE)
     }
 
     if (!useSystemDir() && Sys.getenv("BASILISK_NO_DESTROY")!="1") {
@@ -78,7 +80,7 @@ installAnaconda <- function() {
         stop(sprintf("conda installation failed with status code '%s'", status))
     }
 
-    NULL
+    TRUE 
 }
 
 #' @importFrom utils download.file

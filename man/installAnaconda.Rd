@@ -8,6 +8,8 @@ installAnaconda()
 }
 \value{
 An Anaconda instance is created at the location specified by \code{\link{getBasiliskDir}}.
+Nothing is performed if the instance already exists.
+A logical scalar is returned indicating whether a new instance was created.
 }
 \description{
 Install Anaconda (version 3, 2019.10) to a destination path that depends on the operating system.
