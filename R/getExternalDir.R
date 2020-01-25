@@ -20,7 +20,9 @@
 #' \code{\link{getBasiliskDir}}, where this function is used for Windows or MacOSX.
 #' 
 #' @examples
-#' getExternalDir()
+#' # We can't actually run getExternalDir() here, as it 
+#' # either relies on basilisk already being installed.
+#' print("dummy test to pass BiocCheck")
 #'
 #' @export
 #' @importFrom utils packageVersion
