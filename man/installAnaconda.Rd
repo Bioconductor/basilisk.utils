@@ -7,7 +7,7 @@
 installAnaconda()
 }
 \value{
-An Anaconda instance is created at an OS-dependent location.
+An Anaconda instance is created at the location specified by \code{\link{getBasiliskDir}}.
 }
 \description{
 Install Anaconda (version 3, 2019.10) to a destination path that depends on the operating system.
@@ -15,37 +15,20 @@ This skips the installation if said path already exists.
 }
 \details{
 This function was originally created from code in \url{https://github.com/hafen/rminiconda},
-also borrowing code from \pkg{reticulate}'s \code{install_miniconda} for correct Windows installation. 
+also borrowing code from \pkg{reticulate}'s \code{install_miniconda} for correct Windows installation.
+We use \pkg{BiocFileCache} if available to avoid redownloading the Anaconda installer upon \pkg{basilisk} re-installation.
 
-On Unix, Anaconda is installed inside the \pkg{basilisk} installation directory.
-This is the ideal installation location as it is always cleaned out and replaced when \pkg{basilisk} is reinstalled.
-It also ensures that any R process that can load \pkg{basilisk} will also have permissions to access the Anaconda instance,
-which makes life easier for sysadmins of clusters or other shared resources.
-
-On MacOSX or Windows, Anaconda is instead installed in the \code{\link{user_data_dir}}.
-The standard Bioconductor distribution mechanism will provide a binary package for these two operating systems,
-but the binary will contain hard-coded paths in the Anaconda installation that preclude portable use.
-Thus, we instead have to install Anaconda on the user machines in a location outside the \pkg{basilisk} installation directory,
-ensuring that the Bioconductor build system does not attempt to package a binary.
-
-Windows has the additional complication that the maximum path length is 260 characters in length.
-This can result in problems due to Anaconda's long internally nested paths.
-In such cases, users can redirect Anaconda to install at a shorter path location using the \code{BASILISK_EXTERNAL_DIR} environment variable, which may be sufficient to ensure that the total path length falls under the limit.
-}
-\section{Managing the external installation location}{
-
-Whenever \code{installAnaconda} is re-run on MacOSX or Windows,
+Whenever \code{installAnaconda} is re-run (and \code{BASILISK_USE_SYSTEM_DIR} is not set, see \code{?\link{getBasiliskDir}}),
 the previous Anaconda installation and its various \pkg{basilisk} environments are destroyed.
 This avoids duplication of Anaconda instances that would otherwise chew up disk space at 3 GB a pop.
 
-After the destruction of the previous instance, we rely on the clients to recreate their environments.
+After the destruction of the previous instance, we rely on the client packages to recreate their required environments.
 They should do this automatically if they are using \pkg{basilisk} correctly.
 
-Users can disable this destruction by setting the \code{BASILISK_NO_DESTROY} environment variable to 1.
+Users can disable this destruction by setting the \code{BASILISK_NO_DESTROY} environment variable to \code{"1"}.
 This may be necessary on rare occasions when running multiple R instances on the same Bioconductor release.
-(Multiple instances using different Bioconductor releases pose no problem.)
+(Setting this variable is not required for instances using different Bioconductor releases.)
 }
-
 \examples{
 # We can't actually run installAnaconda() here, as it 
 # hard-codes installation into basilisk's directory on
