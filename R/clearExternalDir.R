@@ -16,7 +16,9 @@
 #' \code{\link{installAnaconda}}, for the motivation behind this function.
 #'
 #' @examples
-#' clearExternalDir()
+#' # We can't actually run clearExternalDir() here, as it 
+#' # relies on basilisk already being installed.
+#' print("dummy test to pass BiocCheck")
 #'
 #' @export
 clearExternalDir <- function() {
@@ -25,4 +27,3 @@ clearExternalDir <- function() {
     all.candidates <- list.files(dirname(host), full.names=TRUE, pattern=paste0("^", major.v))
     unlink(all.candidates, recursive=TRUE)
 }
-

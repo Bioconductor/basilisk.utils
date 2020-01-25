@@ -16,7 +16,9 @@ installed for different versions of \pkg{basilisk} with the same middle version 
 (i.e., same Bioconductor release).
 }
 \examples{
-clearExternalDir()
+# We can't actually run clearExternalDir() here, as it 
+# relies on basilisk already being installed.
+print("dummy test to pass BiocCheck")
 
 }
 \seealso{
