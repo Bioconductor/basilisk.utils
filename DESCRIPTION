@@ -1,6 +1,6 @@
 Package: basilisk.utils
-Version: 0.99.6
-Date: 2020-01-24
+Version: 0.99.7
+Date: 2020-03-06
 Title: Basilisk Installation Utilities
 Authors@R: c(person("Aaron", "Lun", role=c("aut", "cre", "cph"),
         email="infinite.monkeys.with.keyboards@gmail.com"))
@@ -16,10 +16,12 @@ Suggests:
     BiocFileCache
 biocViews: Infrastructure
 Description: 
-    Implements utilities for installation of the basilisk package,
-    primarily to avoid re-writing the same R code in both the configure
-    script (for Unix installation) and in the lazy installation
-    mechanism (for MacOS or Windows installations).
+    Implements utilities for installation of the basilisk package, primarily to
+    avoid re-writing the same R code in both the configure script (for
+    centrally administered R installations) and in the lazy installation
+    mechanism (for distributed binaries). It is highly unlikely that developers
+    - or, heaven forbid, end-users! - will need to interact with this package
+    directly; they should be using the basilisk package instead.
 License: GPL-3
 RoxygenNote: 7.0.2
 VignetteBuilder: knitr
