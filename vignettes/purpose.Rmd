@@ -3,7 +3,7 @@ title: Utilities for _basilisk_ installation
 author: 
 - name: Aaron Lun
   email: infinite.monkeys.with.keyboards@gmail.com
-date: "Revised: January 23, 2019"
+date: "Revised: March 6, 2020"
 output:
   BiocStyle::html_document
 package: basilisk.utils
@@ -28,13 +28,21 @@ If you are an end-user of some client package, you are better off reading the do
 # Why does this package exist?
 
 This package centralizes various R functions that are required for installing `r Biocpkg("basilisk")`.
-On Unix, these functions is called via the `configure` file, while on the other operating systems,
-this is (potentially) called in `basiliskStart()` itself during run-time.
+By default, these functions are (potentially) called in `basiliskStart()` during client run-time.
+However, under certain conditions, they are called via the `configure` file during `r Biocpkg("basilisk")` installation.
 
-Now, the problem is that we cannot put these functions inside `r Biocpkg("basilisk")` itself 
-because `configure` runs before installation!
-The naive option is to simply duplicate the code in both the package and `configure`, 
-which is unappealing as it circumvents `R CMD check`'s ability to check code quality.
+Ideally, we would put these functions inside `r Biocpkg("basilisk")` for use in all situations.
+However, this is not possible as `configure` runs before installation, i.e., before any functions are actually available!
+The naive option is to simply duplicate the code in both the package and `configure`;
+this is unappealing as it requires us to maintain twice as much code and circumvents `R CMD check`'s code quality checks.
 
 The `r Biocpkg("basilisk.utils")` package provides R functions that can be called in both `configure` and `basiliskStart()`.
 This allows us to avoid code duplication and enjoy the safety of `R CMD check`.
+The consequence of this approach is that `r Biocpkg("basilisk.utils")` has no direct relevance to other packages or end-users,
+and thus should never be explicitly loaded into a package namespace or R session.
+
+# Session information
+
+```{r}
+sessionInfo()
+```
