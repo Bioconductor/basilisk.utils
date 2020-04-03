@@ -49,18 +49,24 @@ useSystemDir <- function() {
 #'
 #' @author Aaron Lun
 #'
+#' @examples
+#' getCondaBinary()
+#'
+#' getPythonBinary()
 #' @name getBinaries
 #' @export
 getCondaBinary <- function(loc) {
     suffix <- if (isWindows()) "Scripts/conda.exe" else "bin/conda"
-    file.path(loc, suffix)
+
+    if (missing(loc)) suffix else file.path(loc, suffix)
 }
 
 #' @export
 #' @rdname getBinaries
 getPythonBinary <- function(loc) {
     suffix <- if (isWindows()) "python.exe" else "bin/python"
-    file.path(loc, suffix)
+
+    if (missing(loc)) suffix else file.path(loc, suffix)
 }
 
 .lock_file <- function(path) {

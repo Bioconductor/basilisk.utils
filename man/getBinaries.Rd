@@ -24,6 +24,11 @@ Get binary paths
 This code is largely copied from \pkg{reticulate},
 and is only present here as they do not export these utilities for general consumption.
 }
+\examples{
+getCondaBinary()
+
+getPythonBinary()
+}
 \author{
 Aaron Lun
 }
