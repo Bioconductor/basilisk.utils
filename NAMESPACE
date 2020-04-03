@@ -2,8 +2,10 @@
 
 export(clearExternalDir)
 export(getBasiliskDir)
+export(getCondaBinary)
 export(getEnvironmentDir)
 export(getExternalDir)
+export(getPythonBinary)
 export(installAnaconda)
 export(isMacOSX)
 export(isWindows)
