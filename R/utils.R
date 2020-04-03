@@ -35,3 +35,30 @@ isMacOSX <- function() {
 useSystemDir <- function() {
     identical(Sys.getenv("BASILISK_USE_SYSTEM_DIR"), "1")
 }
+
+#' Get binary paths
+#'
+#' @param loc String containing the path to the root of a conda installation or environment.
+#'
+#' @return String containing the path to the conda or Python executable inside \code{path}.
+#' If \code{path} is not supplied, the relative path from the root of the environment is returned.
+#'
+#' @details
+#' This code is largely copied from \pkg{reticulate},
+#' and is only present here as they do not export these utilities for general consumption.
+#'
+#' @author Aaron Lun
+#'
+#' @name getBinaries
+#' @export
+getCondaBinary <- function(loc) {
+    suffix <- if (isWindows()) "Scripts/conda.exe" else "bin/conda"
+    file.path(loc, suffix)
+}
+
+#' @export
+#' @rdname getBinaries
+getPythonBinary <- function(loc) {
+    suffix <- if (isWindows()) "python.exe" else "bin/python"
+    file.path(loc, suffix)
+}
