@@ -83,8 +83,8 @@ installAnaconda <- function() {
         stop(sprintf("Anaconda installation failed with status code '%s'", status))
     }
 
-    conda.exists <- file.exists(getCondaBinary(dest.path))
-    python.cmd <- getPythonBinary(dest.path)
+    conda.exists <- file.exists(getCondaBinary(dest_path))
+    python.cmd <- getPythonBinary(dest_path)
     report <- system2(python.cmd, c("-E", "-c", shQuote("print(1)")), stdout=TRUE, stderr=FALSE)
     if (!conda.exists || report!="1") {
         stop("Anaconda installation failed for an unknown reason")
