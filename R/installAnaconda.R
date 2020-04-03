@@ -45,7 +45,8 @@ installAnaconda <- function() {
 
     version <- "2019.10"
     base_url <- "https://repo.anaconda.com/archive"
-
+    lock.file <- paste0(dest_path, ".LOCK")
+    write(file=lock.file, x=character(0))
 
     if (isWindows()) {
         arch <- if (.Machine$sizeof.pointer == 8) "x86_64" else "x86"
@@ -76,10 +77,20 @@ installAnaconda <- function() {
         }
     }
 
+    # Rigorous checks for proper installation, heavily inspired if not outright
+    # copied from reticulate::install_miniconda.
     if (status != 0) {
-        stop(sprintf("conda installation failed with status code '%s'", status))
+        stop(sprintf("Anaconda installation failed with status code '%s'", status))
     }
 
+    conda.exists <- file.exists(getCondaBinary(dest.path))
+    python.cmd <- getPythonBinary(dest.path)
+    report <- system2(python.cmd, c("-E", "-c", shQuote("print(1)")), stdout=TRUE, stderr=FALSE)
+    if (!conda.exists || report!="1") {
+        stop("Anaconda installation failed for an unknown reason")
+    }
+
+    unlink(lock.file)
     TRUE 
 }
 
@@ -89,7 +100,7 @@ installAnaconda <- function() {
     fname <- try({
         bfc <- BiocFileCache::BiocFileCache(ask=FALSE)
         BiocFileCache::bfcrpath(bfc, url) 
-    })
+    }, silent=TRUE)
 
     if (is(fname, "try-error")) {
         tmploc <- file.path(tempdir(), basename(url))
