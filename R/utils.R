@@ -62,3 +62,7 @@ getPythonBinary <- function(loc) {
     suffix <- if (isWindows()) "python.exe" else "bin/python"
     file.path(loc, suffix)
 }
+
+.lock_file <- function(path) {
+    paste0(sub("/+$", "", path), ".00basilock")
+}

@@ -58,5 +58,9 @@ getBasiliskDir <- function(assume.installed=TRUE) {
         stop("basilisk installation directory does not exist")
     }
 
+    if (file.exists(.lock_file(inst_path))) {
+        stop(sprintf("incomplete Anaconda installation at '%s'", inst_path))
+    }
+
     inst_path
 }

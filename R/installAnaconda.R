@@ -45,7 +45,7 @@ installAnaconda <- function() {
 
     version <- "2019.10"
     base_url <- "https://repo.anaconda.com/archive"
-    lock.file <- paste0(dest_path, ".LOCK")
+    lock.file <- .lock_file(dest_path)
     write(file=lock.file, x=character(0))
 
     if (isWindows()) {
