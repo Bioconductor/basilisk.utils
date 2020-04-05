@@ -1,5 +1,3 @@
-.env_dir <- "basilisk"
-
 #' Get the \pkg{basilisk} environment directory
 #'
 #' Find the installation directory for the \pkg{basilisk} Python environments for a particular client package.
@@ -39,6 +37,8 @@ getEnvironmentDir <- function(pkgname, installed=TRUE) {
         vdir <- file.path(getExternalDir(), paste0(pkgname, "-", packageVersion(pkgname)))
     } else {
         vdir <- .fetch_system_dir(pkgname, installed)
+        file.path(vdir, .env_dir)
     }
-    file.path(vdir, .env_dir)
 }
+
+.env_dir <- "basilisk"
