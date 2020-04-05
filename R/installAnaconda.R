@@ -41,10 +41,13 @@ installAnaconda <- function(installed=TRUE) {
     if (file.exists(dest_path)) {
         return(FALSE)
     }
+
+    # If we're assuming that basilisk is installed, and we're using a system
+    # directory, and the Anaconda installation directory is missing, something
+    # is clearly wrong. We check this here instead of in `getBasiliskDir()` to
+    # avoid throwing after an external install, given that `installAnaconda()`
+    # is usually called before `getBasiliskDir()`.
     if (installed && useSystemDir()) {
-        # If we're assuming that basilisk is installed, and we're using a
-        # system directory, and the Anaconda installation directory is missing,
-        # something is clearly wrong.
         stop("Anaconda should have been installed during basilisk installation")
     }
 
