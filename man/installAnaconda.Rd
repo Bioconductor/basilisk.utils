@@ -4,7 +4,11 @@
 \alias{installAnaconda}
 \title{Install Anaconda}
 \usage{
-installAnaconda()
+installAnaconda(installed = TRUE)
+}
+\arguments{
+\item{installed}{Logical scalar indicating whether \pkg{basilisk} is already installed.
+Should only be set to \code{FALSE} in \pkg{basilisk} \code{configure} scripts.}
 }
 \value{
 An Anaconda instance is created at the location specified by \code{\link{getBasiliskDir}}.

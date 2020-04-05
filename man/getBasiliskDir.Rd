@@ -4,14 +4,13 @@
 \alias{getBasiliskDir}
 \title{Get the \pkg{basilisk} Anaconda directory}
 \usage{
-getBasiliskDir(assume.installed = TRUE)
+getBasiliskDir(installed = TRUE)
 }
 \arguments{
-\item{assume.installed}{Logical scalar indicating whether we can assume the Anaconda instance is already installed.}
+\item{installed}{Logical scalar indicating whether \pkg{basilisk} is already installed.}
 }
 \value{
 String containing the path to the Anaconda instance.
-If \code{assume.installed=TRUE}, this function will throw an error if the expected directory does not exist.
 }
 \description{
 Find the installation directory for the \pkg{basilisk}-managed Anaconda instance.
@@ -31,6 +30,10 @@ the function will return a path to a location inside the \code{basilisk} system 
 This is the ideal approach when installing from source as any Anaconda and \pkg{basilisk} re-installations are synchronized.
 It also ensures that any R process that can load \pkg{basilisk} will also have permissions to access the Anaconda instance,
 which makes life easier for sysadmins of clusters or other shared resources.
+
+We suggest always calling this function after an \code{\link{installAnaconda}} call,
+which guarantees the presence of the Anaconda installation directory (or dies trying).
+Setting \code{installed=FALSE} should only happen inside the \pkg{basilisk} \code{configure} script.
 }
 \examples{
 # Setting the environment variable to run this example: 
@@ -38,7 +41,7 @@ which makes life easier for sysadmins of clusters or other shared resources.
 old <- Sys.getenv("BASILISK_USE_SYSTEM_DIR")
 Sys.setenv(BASILISK_USE_SYSTEM_DIR=1)
 
-getBasiliskDir(assume.installed=FALSE)
+getBasiliskDir(installed=FALSE)
 
 Sys.setenv(BASILISK_USE_SYSTEM_DIR=old)
 }

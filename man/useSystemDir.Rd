@@ -12,8 +12,12 @@ Logical scalar providing an answer to the above.
 \description{
 Should we use the R system directory for installing \pkg{basilisk}'s Anaconda instance or client environments?
 }
+\details{
+The default value is \code{FALSE} to avoid problems with position-dependent code in packaged binaries.
+This can be changed by setting \code{BASILISK_USE_SYSTEM_DIR} environment variable to \code{"1"}.
+}
 \seealso{
-\code{\link{getBasiliskDir}} and \code{\link{getEnvironmentDir}}, where these functions are used.
+\code{\link{getBasiliskDir}} and \code{\link{getEnvironmentDir}}, where this function is used.
 }
 \author{
 Aaron Lun
