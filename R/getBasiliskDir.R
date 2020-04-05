@@ -4,10 +4,9 @@
 #'
 #' Find the installation directory for the \pkg{basilisk}-managed Anaconda instance.
 #'
-#' @param assume.installed Logical scalar indicating whether we can assume the Anaconda instance is already installed.
+#' @param installed Logical scalar indicating whether \pkg{basilisk} is already installed.
 #'
 #' @return String containing the path to the Anaconda instance.
-#' If \code{assume.installed=TRUE}, this function will throw an error if the expected directory does not exist.
 #'
 #' @details
 #' By default, Anaconda is installed to a location specified by \code{\link{getExternalDir}}.
@@ -25,6 +24,10 @@
 #' It also ensures that any R process that can load \pkg{basilisk} will also have permissions to access the Anaconda instance,
 #' which makes life easier for sysadmins of clusters or other shared resources.
 #'
+#' We suggest always calling this function after an \code{\link{installAnaconda}} call,
+#' which guarantees the presence of the Anaconda installation directory (or dies trying).
+#' Setting \code{installed=FALSE} should only happen inside the \pkg{basilisk} \code{configure} script.
+#'
 #' @author Aaron Lun
 #'
 #' @examples
@@ -33,29 +36,20 @@
 #' old <- Sys.getenv("BASILISK_USE_SYSTEM_DIR")
 #' Sys.setenv(BASILISK_USE_SYSTEM_DIR=1)
 #'
-#' getBasiliskDir(assume.installed=FALSE)
+#' getBasiliskDir(installed=FALSE)
 #'
 #' Sys.setenv(BASILISK_USE_SYSTEM_DIR=old)
 #' @export
-getBasiliskDir <- function(assume.installed=TRUE) {
+getBasiliskDir <- function(installed=TRUE) { 
     inst_path <- Sys.getenv("BASILISK_EXTERNAL_ANACONDA")
+
     if (identical(inst_path, "")) {
         if (!useSystemDir()) {
             inst_path <- getExternalDir()
         } else {
-            if (assume.installed) {
-                # Uses the correct location if .libPaths() has been changed.
-                inst_path <- system.file(package="basilisk")
-            } else {
-                # Can't use system.file(), basilisk isn't installed yet!
-                inst_path <- file.path(.libPaths()[1], "basilisk")
-            }
+            inst_path <- .fetch_system_dir("basilisk", installed)
         }
         inst_path <- file.path(inst_path, .core_dir)
-    }
-
-    if (assume.installed && !file.exists(inst_path)) {
-        stop("basilisk installation directory does not exist")
     }
 
     if (file.exists(.lock_file(inst_path))) {

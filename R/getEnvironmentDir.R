@@ -2,13 +2,12 @@
 
 #' Get the \pkg{basilisk} environment directory
 #'
-#' Find the installation directory for the \pkg{basilisk} Python environments.
+#' Find the installation directory for the \pkg{basilisk} Python environments for a particular client package.
 #'
 #' @param pkgname String containing the name of the \pkg{basilisk} client package responsible for generating the environment. 
-#' @param assume.installed Logical scalar indicating whether we can assume the environment directoy is already installed.
+#' @param installed Logical scalar indicating whether the client package is already installed.
 #'
 #' @return String containing the path to the environment directory.
-#' If \code{assume.installed=TRUE}, this function will throw an error if the expected directory does not exist.
 #'
 #' @details
 #' By default, \pkg{basilisk} environments are installed to a location specified by \code{\link{getExternalDir}}.
@@ -29,26 +28,17 @@
 #' old <- Sys.getenv("BASILISK_USE_SYSTEM_DIR")
 #' Sys.setenv(BASILISK_USE_SYSTEM_DIR=1)
 #'
-#' getEnvironmentDir("client.of.basilisk", assume.installed=FALSE)
+#' getEnvironmentDir("client.of.basilisk", installed=FALSE)
 #'
 #' Sys.setenv(BASILISK_USE_SYSTEM_DIR=old)
 #'
 #' @export
 #' @importFrom utils packageVersion
-getEnvironmentDir <- function(pkgname, assume.installed=FALSE) {
+getEnvironmentDir <- function(pkgname, installed=TRUE) {
     if (!useSystemDir()) {
         vdir <- file.path(getExternalDir(), paste0(pkgname, "-", packageVersion(pkgname)))
     } else {
-        if (assume.installed) {
-            # This is more robust than .libPaths(), which may change
-            # between *basilisk* installation and client installation;
-            # system.file() should still pull out the correct dir.
-            vdir <- system.file(package=pkgname)
-        } else {
-            # As this is run in configure, system.file() will not
-            # work, as pkgname isn't even installled yet!
-            vdir <- file.path(.libPaths()[1], pkgname)
-        }
+        vdir <- .fetch_system_dir(pkgname, installed)
     }
     file.path(vdir, .env_dir)
 }

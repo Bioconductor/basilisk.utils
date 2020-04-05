@@ -98,3 +98,16 @@ getPythonBinary <- function(loc) {
 .lock_file <- function(path) {
     paste0(sub("/+$", "", path), ".00basilock")
 }
+
+.fetch_system_dir <- function(pkgname, installed) {
+    if (installed) {
+        # This is more robust than .libPaths(), which may change
+        # between *basilisk* installation and client installation;
+        # system.file() should still pull out the correct dir.
+        vdir <- system.file(package=pkgname)
+    } else {
+        # As this is run in configure, system.file() will not work, as pkgname
+        # isn't even installled yet! 
+        vdir <- file.path(.libPaths()[1], pkgname)
+    }
+}

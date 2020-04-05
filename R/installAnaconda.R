@@ -3,6 +3,9 @@
 #' Install Anaconda (version 3, 2019.10) to a destination path that depends on the operating system.
 #' This skips the installation if said path already exists.
 #'
+#' @param installed Logical scalar indicating whether \pkg{basilisk} is already installed.
+#' Should only be set to \code{FALSE} in \pkg{basilisk} \code{configure} scripts.
+#' 
 #' @details
 #' This function was originally created from code in \url{https://github.com/hafen/rminiconda},
 #' also borrowing code from \pkg{reticulate}'s \code{install_miniconda} for correct Windows installation.
@@ -33,10 +36,16 @@
 #' print("dummy test to pass BiocCheck")
 #'
 #' @export
-installAnaconda <- function() {
-    dest_path <- getBasiliskDir(assume.installed=FALSE)
+installAnaconda <- function(installed=TRUE) {
+    dest_path <- getBasiliskDir(installed=installed)
     if (file.exists(dest_path)) {
         return(FALSE)
+    }
+    if (installed && useSystemDir()) {
+        # If we're assuming that basilisk is installed, and we're using a
+        # system directory, and the Anaconda installation directory is missing,
+        # something is clearly wrong.
+        stop("Anaconda should have been installed during basilisk installation")
     }
 
     dir.create(dirname(dest_path), showWarnings=TRUE, recursive=FALSE)
