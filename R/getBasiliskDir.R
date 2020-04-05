@@ -52,9 +52,5 @@ getBasiliskDir <- function(installed=TRUE) {
         inst_path <- file.path(inst_path, .core_dir)
     }
 
-    if (file.exists(.lock_file(inst_path))) {
-        stop(sprintf("incomplete Anaconda installation at '%s'", inst_path))
-    }
-
     inst_path
 }

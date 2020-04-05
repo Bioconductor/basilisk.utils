@@ -38,7 +38,12 @@
 #' @export
 installAnaconda <- function(installed=TRUE) {
     dest_path <- getBasiliskDir(installed=installed)
+    lock_file <- .lock_file(dest_path)
+
     if (file.exists(dest_path)) {
+        if (file.exists(lock_file)) {
+            stop(sprintf("incomplete Anaconda installation at '%s'", dest_path))
+        }
         return(FALSE)
     }
 
@@ -52,8 +57,7 @@ installAnaconda <- function(installed=TRUE) {
     }
 
     dir.create(dirname(dest_path), showWarnings=TRUE, recursive=FALSE)
-    lock.file <- .lock_file(dest_path)
-    write(file=lock.file, x=character(0))
+    write(file=lock_file, x=character(0))
 
     if (!useSystemDir() && destroyOldVersions()) {
         clearExternalDir()
@@ -104,7 +108,7 @@ installAnaconda <- function(installed=TRUE) {
         stop("Anaconda installation failed for an unknown reason")
     }
 
-    unlink(lock.file)
+    unlink(lock_file)
     TRUE 
 }
 
@@ -123,4 +127,8 @@ installAnaconda <- function(installed=TRUE) {
     }
 
     fname
+}
+
+.lock_file <- function(path) {
+    paste0(sub("/+$", "", path), ".00LOCK")
 }

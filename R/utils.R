@@ -95,10 +95,6 @@ getPythonBinary <- function(loc) {
     if (missing(loc)) suffix else file.path(loc, suffix)
 }
 
-.lock_file <- function(path) {
-    paste0(sub("/+$", "", path), ".00basilock")
-}
-
 .fetch_system_dir <- function(pkgname, installed) {
     if (installed) {
         # This is more robust than .libPaths(), which may change
