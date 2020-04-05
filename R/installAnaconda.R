@@ -56,7 +56,7 @@ installAnaconda <- function(installed=TRUE) {
         stop("Anaconda should have been installed during basilisk installation")
     }
 
-    dir.create(dirname(dest_path), showWarnings=TRUE, recursive=FALSE)
+    dir.create(dirname(dest_path), showWarnings=FALSE, recursive=TRUE)
     write(file=lock_file, x=character(0))
 
     if (!useSystemDir() && destroyOldVersions()) {
