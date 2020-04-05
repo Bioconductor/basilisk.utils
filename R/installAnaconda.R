@@ -39,14 +39,16 @@ installAnaconda <- function() {
         return(FALSE)
     }
 
-    if (!useSystemDir() && Sys.getenv("BASILISK_NO_DESTROY")!="1") {
+    dir.create(dirname(dest_path), showWarnings=TRUE, recursive=FALSE)
+    lock.file <- .lock_file(dest_path)
+    write(file=lock.file, x=character(0))
+
+    if (!useSystemDir() && destroyOldVersions()) {
         clearExternalDir()
     }
 
     version <- "2019.10"
     base_url <- "https://repo.anaconda.com/archive"
-    lock.file <- .lock_file(dest_path)
-    write(file=lock.file, x=character(0))
 
     if (isWindows()) {
         arch <- if (.Machine$sizeof.pointer == 8) "x86_64" else "x86"
