@@ -38,13 +38,16 @@
 #' @export
 installAnaconda <- function(installed=TRUE) {
     dest_path <- getBasiliskDir(installed=installed)
-    lock_file <- .lock_file(dest_path)
+    lock_file <- getLockFile(dest_path)
 
     if (file.exists(dest_path)) {
-        if (file.exists(lock_file)) {
-            stop(sprintf("incomplete Anaconda installation at '%s'", dest_path))
+        if (!file.exists(lock_file)) {
+            return(FALSE)
         }
-        return(FALSE)
+
+        warning(sprintf("replacing incomplete Anaconda installation at '%s'", dest_path))
+        unlink(dest_path, recursive=TRUE)
+        unlink(lock_file)
     }
 
     # If we're assuming that basilisk is installed, and we're using a system
@@ -127,8 +130,4 @@ installAnaconda <- function(installed=TRUE) {
     }
 
     fname
-}
-
-.lock_file <- function(path) {
-    paste0(sub("/+$", "", path), ".00LOCK")
 }

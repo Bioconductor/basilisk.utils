@@ -107,3 +107,22 @@ getPythonBinary <- function(loc) {
         vdir <- file.path(.libPaths()[1], pkgname)
     }
 }
+
+#' Get lock file
+#' 
+#' Get the path to a lock file, typically used to mark an installation in progress 
+#' (or an incomplete installation that needs to be replaced).
+#'
+#' @param path String containing a path to an Anaconda installation or conda environment that is to be installed.
+#'
+#' @return String containing a path to a lock file,
+#' to be \code{touch}ed before installation starts and deleted after installation finishes \emph{successfully}.
+#' 
+#' @author Aaron Lun
+#' @examples
+#' getLockFile("AAAA")
+#'
+#' @export
+getLockFile <- function(path) {
+    paste0(sub("/+$", "", path), ".00LOCK")
+}
