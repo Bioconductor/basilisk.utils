@@ -46,10 +46,11 @@ getBasiliskDir <- function(installed=TRUE) {
     if (identical(inst_path, "")) {
         if (!useSystemDir()) {
             inst_path <- getExternalDir()
+            inst_path <- file.path(inst_path, "0") # keeping path short for Windows.
         } else {
             inst_path <- .fetch_system_dir("basilisk", installed)
+            inst_path <- file.path(inst_path, "anaconda")
         }
-        inst_path <- file.path(inst_path, .core_dir)
     }
 
     inst_path

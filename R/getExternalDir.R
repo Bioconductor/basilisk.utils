@@ -32,7 +32,8 @@ getExternalDir <- function() {
     inst_path <- Sys.getenv("BASILISK_EXTERNAL_DIR")
     if (inst_path=="") {
         # Using "cache", not "data", as it doesn't have spaces on Mac.
-        user_cache_dir(appname="basilisk", appauthor="me", version=pkg.v)
+        # Also getting rid of appauthor= and opinion= to keep the path low on Windows.
+        user_cache_dir(appname="basilisk", appauthor=NULL, version=pkg.v, opinion=FALSE)
     } else {
         file.path(inst_path, pkg.v)
     }
