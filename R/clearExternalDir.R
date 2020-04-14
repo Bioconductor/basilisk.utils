@@ -48,5 +48,10 @@ clearObsoleteDir <- function(path=getExternalDir()) {
     if (save) {
         all.candidates <- setdiff(all.candidates, path)
     }
+
+    if (isWindows() || .test_win_references()) {
+        .flush_win_references(all.candidates)
+    }
+
     unlink(all.candidates, recursive=TRUE)
 }

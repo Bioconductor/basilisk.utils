@@ -34,11 +34,16 @@
 #' @importFrom utils packageVersion
 getEnvironmentDir <- function(pkgname, installed=TRUE) {
     if (!useSystemDir()) {
-        vdir <- file.path(getExternalDir(), paste0(pkgname, "-", packageVersion(pkgname)))
+        pkg.v <- as.character(packageVersion(pkgname))
+
+        if (isWindows() || .test_win_references()) {
+            .retrieve_win_reference(pkgname, pkg.v)
+        } else {
+            file.path(getExternalDir(), paste0(pkgname, "-", pkg.v))
+        }
+
     } else {
         vdir <- .fetch_system_dir(pkgname, installed)
-        file.path(vdir, .env_dir)
+        file.path(vdir, "basilisk")
     }
 }
-
-.env_dir <- "basilisk"
