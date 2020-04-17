@@ -46,7 +46,11 @@ clearObsoleteDir <- function(path=getExternalDir()) {
     all.candidates <- list.files(dirname(path), full.names=TRUE, pattern=paste0("^", major.v))
 
     if (save) {
-        all.candidates <- setdiff(all.candidates, path)
+        # Not using setdiff to avoid problems with path 
+        # normalization on - you guessed it! - Windows.
+        keep <- basename(all.candidates) != basename(path) 
+        all.candidates <- all.candidates[keep]
     }
+
     unlink(all.candidates, recursive=TRUE)
 }
