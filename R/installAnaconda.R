@@ -125,7 +125,9 @@ installAnaconda <- function(installed=TRUE) {
 
     if (is(fname, "try-error")) {
         tmploc <- file.path(tempdir(), basename(url))
-        download.file(url, tmploc)
+        if (download.file(url, tmploc, mode="wb")) {
+            stop("failed to download the Anaconda installer")
+        }
         fname <- tmploc
     }
 
