@@ -46,7 +46,7 @@ installAnaconda <- function(installed=TRUE) {
         }
 
         warning(sprintf("replacing incomplete Anaconda installation at '%s'", dest_path))
-        unlink(dest_path, recursive=TRUE)
+        unlink(dest_path, recursive=TRUE, force=TRUE)
         unlink(lock_file)
     }
 

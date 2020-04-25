@@ -52,5 +52,5 @@ clearObsoleteDir <- function(path=getExternalDir()) {
         all.candidates <- all.candidates[keep]
     }
 
-    unlink(all.candidates, recursive=TRUE)
+    unlink(all.candidates, recursive=TRUE, force=TRUE)
 }
