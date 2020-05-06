@@ -93,6 +93,17 @@ installAnaconda <- function(installed=TRUE) {
             # which causes default paths for zlib to be ignored and breaks
             # installation. So, we unset it before attempting installation.
             status <- system(paste("unset DYLD_FALLBACK_LIBRARY_PATH; bash", inst_args))
+
+            # Eliminating MKL from the installation, see https://github.com/rstudio/reticulate/issues/758.
+            # This is done by following advice in https://docs.anaconda.com/mkl-optimizations/.
+            affected <- c("numpy", "scipy", "scikit-learn", "numexpr")
+
+            # Synchronized with current Anaconda by: X <- listCorePackages(); X$full[X$package %in% affected]
+            versioned <- c("numexpr=2.7.0", "numpy=1.17.2", "scikit-learn=0.21.3", "scipy=1.3.1")
+
+            conda.bin <- getCondaBinary(dest_path)
+            system2(conda.bin, c("install", "nomkl", versioned))
+            system2(conda.bin, c("remove", "mkl", "mkl-service"))
         } else {
             status <- system2("bash", inst_args)
         }
