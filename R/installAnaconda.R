@@ -1,6 +1,6 @@
-#' Install Anaconda 
+#' Install Miniconda 
 #'
-#' Install Anaconda (version 3, 2019.10) to a destination path that depends on the operating system.
+#' Install Miniconda (version 3, 2019.10) to a destination path that depends on the operating system.
 #' This skips the installation if said path already exists.
 #'
 #' @param installed Logical scalar indicating whether \pkg{basilisk} is already installed.
@@ -9,11 +9,11 @@
 #' @details
 #' This function was originally created from code in \url{https://github.com/hafen/rminiconda},
 #' also borrowing code from \pkg{reticulate}'s \code{install_miniconda} for correct Windows installation.
-#' We use \pkg{BiocFileCache} if available to avoid redownloading the Anaconda installer upon \pkg{basilisk} re-installation.
+#' We use \pkg{BiocFileCache} if available to avoid redownloading the Miniconda installer upon \pkg{basilisk} re-installation.
 #'
-#' Whenever \code{installAnaconda} is re-run (and \code{BASILISK_USE_SYSTEM_DIR} is not set, see \code{?\link{getBasiliskDir}}),
-#' the previous Anaconda installation and its various \pkg{basilisk} environments are destroyed.
-#' This avoids duplication of Anaconda instances that would otherwise chew up disk space at 3 GB a pop.
+#' Whenever \code{installMiniconda} is re-run (and \code{BASILISK_USE_SYSTEM_DIR} is not set, see \code{?\link{getBasiliskDir}}),
+#' the previous Miniconda installation and its various \pkg{basilisk} environments are destroyed.
+#' This avoids duplication of Miniconda instances that would otherwise chew up disk space at 3 GB a pop.
 #' 
 #' After the destruction of the previous instance, we rely on the client packages to recreate their required environments.
 #' They should do this automatically if they are using \pkg{basilisk} correctly.
@@ -23,20 +23,20 @@
 #' (Setting this variable is not required for instances using different Bioconductor releases.)
 #'
 #' @return
-#' An Anaconda instance is created at the location specified by \code{\link{getBasiliskDir}}.
+#' An Miniconda instance is created at the location specified by \code{\link{getBasiliskDir}}.
 #' Nothing is performed if the instance already exists.
 #' A logical scalar is returned indicating whether a new instance was created.
 #'  
 #' @author Aaron Lun
 #'
 #' @examples
-#' # We can't actually run installAnaconda() here, as it 
+#' # We can't actually run installMiniconda() here, as it 
 #' # either relies on basilisk already being installed or
 #' # it has a hard-coded path to the basilisk system dir.
 #' print("dummy test to pass BiocCheck")
 #'
 #' @export
-installAnaconda <- function(installed=TRUE) {
+installMiniconda <- function(installed=TRUE) {
     dest_path <- getBasiliskDir(installed=installed)
     lock_file <- getLockFile(dest_path)
 
@@ -45,33 +45,33 @@ installAnaconda <- function(installed=TRUE) {
             return(FALSE)
         }
 
-        warning(sprintf("replacing incomplete Anaconda installation at '%s'", dest_path))
+        warning(sprintf("replacing incomplete Miniconda installation at '%s'", dest_path))
         unlink(dest_path, recursive=TRUE, force=TRUE)
         unlink(lock_file)
     }
 
     # If we're assuming that basilisk is installed, and we're using a system
-    # directory, and the Anaconda installation directory is missing, something
+    # directory, and the Miniconda installation directory is missing, something
     # is clearly wrong. We check this here instead of in `getBasiliskDir()` to
-    # avoid throwing after an external install, given that `installAnaconda()`
+    # avoid throwing after an external install, given that `installMiniconda()`
     # is usually called before `getBasiliskDir()`.
     if (installed && useSystemDir()) {
-        stop("Anaconda should have been installed during basilisk installation")
+        stop("Miniconda should have been installed during basilisk installation")
     }
-
-    dir.create(dirname(dest_path), showWarnings=FALSE, recursive=TRUE)
-    write(file=lock_file, x=character(0))
 
     if (!useSystemDir() && destroyOldVersions()) {
         clearExternalDir()
     }
 
-    version <- "2019.10"
-    base_url <- "https://repo.anaconda.com/archive"
+    dir.create(dirname(dest_path), showWarnings=FALSE, recursive=TRUE)
+    write(file=lock_file, x=character(0))
+
+    version <- "py37_4.8.2"
+    base_url <- "https://repo.anaconda.com/miniconda"
 
     if (isWindows()) {
         arch <- if (.Machine$sizeof.pointer == 8) "x86_64" else "x86"
-        inst_file <- sprintf("Anaconda3-%s-Windows-%s.exe", version, arch)
+        inst_file <- sprintf("Miniconda3-%s-Windows-%s.exe", version, arch)
         tmploc <- .expedient_download(file.path(base_url, inst_file))
 
         # Using the same code as reticulate:::miniconda_installer_run.
@@ -83,7 +83,7 @@ installAnaconda <- function(installed=TRUE) {
     } else {
         is_mac <- isMacOSX()
         sysname <- if (is_mac) "MacOSX" else "Linux"
-        inst_file <- sprintf("Anaconda3-%s-%s-x86_64.sh", version, sysname)
+        inst_file <- sprintf("Miniconda3-%s-%s-x86_64.sh", version, sysname)
 
         tmploc <- .expedient_download(file.path(base_url, inst_file))
         inst_args <- sprintf(" %s -b -p %s", tmploc, dest_path)
@@ -96,14 +96,8 @@ installAnaconda <- function(installed=TRUE) {
 
             # Eliminating MKL from the installation, see https://github.com/rstudio/reticulate/issues/758.
             # This is done by following advice in https://docs.anaconda.com/mkl-optimizations/.
-            affected <- c("numpy", "scipy", "scikit-learn", "numexpr")
-
-            # Synchronized with current Anaconda by: X <- listCorePackages(); X$full[X$package %in% affected]
-            versioned <- c("numexpr=2.7.0", "numpy=1.17.2", "scikit-learn=0.21.3", "scipy=1.3.1")
-
             conda.bin <- getCondaBinary(dest_path)
-            system2(conda.bin, c("install", "nomkl", versioned))
-            system2(conda.bin, c("remove", "mkl", "mkl-service"))
+            system2(conda.bin, c("install", "--yes", "--no-update-deps", "nomkl"))
         } else {
             status <- system2("bash", inst_args)
         }
@@ -112,14 +106,14 @@ installAnaconda <- function(installed=TRUE) {
     # Rigorous checks for proper installation, heavily inspired if not outright
     # copied from reticulate::install_miniconda.
     if (status != 0) {
-        stop(sprintf("Anaconda installation failed with status code '%s'", status))
+        stop(sprintf("Miniconda installation failed with status code '%s'", status))
     }
 
     conda.exists <- file.exists(getCondaBinary(dest_path))
     python.cmd <- getPythonBinary(dest_path)
     report <- system2(python.cmd, c("-E", "-c", shQuote("print(1)")), stdout=TRUE, stderr=FALSE)
     if (!conda.exists || report!="1") {
-        stop("Anaconda installation failed for an unknown reason")
+        stop("Miniconda installation failed for an unknown reason")
     }
 
     unlink(lock_file)
@@ -137,7 +131,7 @@ installAnaconda <- function(installed=TRUE) {
     if (is(fname, "try-error")) {
         tmploc <- file.path(tempdir(), basename(url))
         if (download.file(url, tmploc, mode="wb")) {
-            stop("failed to download the Anaconda installer")
+            stop("failed to download the Miniconda installer")
         }
         fname <- tmploc
     }
