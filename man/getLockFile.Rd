@@ -7,7 +7,7 @@
 getLockFile(path)
 }
 \arguments{
-\item{path}{String containing a path to an Anaconda installation or conda environment that is to be installed.}
+\item{path}{String containing a path to an Miniconda installation or conda environment that is to be installed.}
 }
 \value{
 String containing a path to a lock file,

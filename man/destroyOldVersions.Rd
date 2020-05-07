@@ -10,14 +10,14 @@ destroyOldVersions()
 Logical scalar providing an answer to the above.
 }
 \description{
-Should we destroy old installations of Anaconda from previous versions of \pkg{basilisk} or its client packages?
+Should we destroy old installations of Miniconda from previous versions of \pkg{basilisk} or its client packages?
 }
 \details{
 The default value is \code{TRUE}, in order to save some hard drive space.
 This can be changed by setting \code{BASILISK_NO_DESTROY} environment variable to \code{"1"}.
 }
 \seealso{
-\code{\link{installAnaconda}}, where this function is used.
+\code{\link{installMiniconda}}, where this function is used.
 
 \code{\link{clearObsoleteDir}}, which may be triggered by this function.
 }

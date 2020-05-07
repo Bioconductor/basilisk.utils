@@ -22,7 +22,7 @@ isMacOSX <- function() {
 
 #' Use the R system directory?
 #'
-#' Should we use the R system directory for installing \pkg{basilisk}'s Anaconda instance or client environments?
+#' Should we use the R system directory for installing \pkg{basilisk}'s Miniconda instance or client environments?
 #'
 #' @details
 #' The default value is \code{FALSE} to avoid problems with position-dependent code in packaged binaries.
@@ -42,7 +42,7 @@ useSystemDir <- function() {
 
 #' Destroy old versions?
 #' 
-#' Should we destroy old installations of Anaconda from previous versions of \pkg{basilisk} or its client packages?
+#' Should we destroy old installations of Miniconda from previous versions of \pkg{basilisk} or its client packages?
 #'
 #' @details
 #' The default value is \code{TRUE}, in order to save some hard drive space.
@@ -53,7 +53,7 @@ useSystemDir <- function() {
 #' @author Aaron Lun
 #'
 #' @seealso 
-#' \code{\link{installAnaconda}}, where this function is used.
+#' \code{\link{installMiniconda}}, where this function is used.
 #'
 #' \code{\link{clearObsoleteDir}}, which may be triggered by this function.
 #' 
@@ -113,7 +113,7 @@ getPythonBinary <- function(loc) {
 #' Get the path to a lock file, typically used to mark an installation in progress 
 #' (or an incomplete installation that needs to be replaced).
 #'
-#' @param path String containing a path to an Anaconda installation or conda environment that is to be installed.
+#' @param path String containing a path to an Miniconda installation or conda environment that is to be installed.
 #'
 #' @return String containing a path to a lock file,
 #' to be \code{touch}ed before installation starts and deleted after installation finishes \emph{successfully}.
