@@ -76,7 +76,9 @@ installMiniconda <- function(installed=TRUE) {
 
         # Using the same code as reticulate:::miniconda_installer_run.
         dir.create(dest_path, recursive = TRUE, showWarnings = FALSE)
-        inst_args <- sprintf("/InstallationType=JustMe /RegisterPython=0 /S /D=%s", utils::shortPathName(dest_path))
+        inst_args <- c("/InstallationType=JustMe", "/AddToPath=0",
+            "/RegisterPython=0", "/S", "/NoRegistry=1",
+            sprintf("/D=%s", utils::shortPathName(dest_path)))
         Sys.chmod(tmploc, mode = "0755")
         status <- system2(tmploc, inst_args)
 
