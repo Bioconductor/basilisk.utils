@@ -1,10 +1,10 @@
 # Checking that everyone responds to their environment variables.
 # library(testthat); library(basilisk.utils); source("test-env.R")
 
-test_that("BASILISK_EXTERNAL_ANACONDA works", {
-    Sys.setenv(BASILISK_EXTERNAL_ANACONDA="blah")
+test_that("BASILISK_EXTERNAL_CONDA works", {
+    Sys.setenv(BASILISK_EXTERNAL_CONDA="blah")
     expect_identical('blah', getBasiliskDir(installed=FALSE))
-    Sys.unsetenv("BASILISK_EXTERNAL_ANACONDA")
+    Sys.unsetenv("BASILISK_EXTERNAL_CONDA")
 })
 
 test_that("BASILISK_USE_SYSTEM_DIR works", {
