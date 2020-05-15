@@ -47,7 +47,7 @@ installMiniconda <- function(installed=TRUE) {
 
         warning(sprintf("replacing incomplete Miniconda installation at '%s'", dest_path))
         unlink(dest_path, recursive=TRUE, force=TRUE)
-        unlink(lock_file)
+        unlink(lock_file, force=TRUE)
     }
 
     # If we're assuming that basilisk is installed, and we're using a system
@@ -72,7 +72,12 @@ installMiniconda <- function(installed=TRUE) {
     if (isWindows()) {
         arch <- if (.Machine$sizeof.pointer == 8) "x86_64" else "x86"
         inst_file <- sprintf("Miniconda3-%s-Windows-%s.exe", version, arch)
-        tmploc <- .expedient_download(file.path(base_url, inst_file))
+        #tmploc <- .expedient_download(file.path(base_url, inst_file))
+
+        # I dunno, man. I'm just grasping at straws to avoid the Windows TIMEOUT.
+        inst_file <- "Anaconda3-2020.02-Windows-x86_64.exe" 
+        tmploc <- file.path("https://repo.anaconda.com/archive", inst_file)
+        tmploc <- .expedient_download(tmploc)
 
         # Using the same code as reticulate:::miniconda_installer_run.
         dir.create(dest_path, recursive = TRUE, showWarnings = FALSE)
@@ -118,7 +123,7 @@ installMiniconda <- function(installed=TRUE) {
         stop("Miniconda installation failed for an unknown reason")
     }
 
-    unlink(lock_file)
+    unlink(lock_file, force=TRUE)
     TRUE 
 }
 
