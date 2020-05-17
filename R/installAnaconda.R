@@ -62,8 +62,9 @@ installMiniconda <- function(installed=TRUE) {
     if (!useSystemDir() && destroyOldVersions()) {
         clearExternalDir()
     }
-
-    dir.create(dirname(dest_path), showWarnings=FALSE, recursive=TRUE)
+    if (!dir.create(dirname(dest_path), showWarnings=FALSE, recursive=TRUE)) {
+        stop("failed to create '", dirname(dest_path), "'") 
+    }
     write(file=lock_file, x=character(0))
 
     version <- "py37_4.8.2"
