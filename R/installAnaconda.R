@@ -46,8 +46,8 @@ installMiniconda <- function(installed=TRUE) {
         }
 
         warning(sprintf("replacing incomplete Miniconda installation at '%s'", dest_path))
-        unlink(dest_path, recursive=TRUE, force=TRUE)
-        unlink(lock_file, force=TRUE)
+        unlink2(dest_path)
+        unlink2(lock_file)
     }
 
     # If we're assuming that basilisk is installed, and we're using a system
@@ -62,9 +62,10 @@ installMiniconda <- function(installed=TRUE) {
     if (!useSystemDir() && destroyOldVersions()) {
         clearExternalDir()
     }
-    if (!dir.create(dirname(dest_path), showWarnings=FALSE, recursive=TRUE)) {
-        stop("failed to create '", dirname(dest_path), "'") 
-    }
+
+    host <- dirname(dest_path)
+    unlink2(host)
+    dir.create2(host)
     write(file=lock_file, x=character(0))
 
     version <- "py37_4.8.2"
@@ -81,7 +82,7 @@ installMiniconda <- function(installed=TRUE) {
         tmploc <- .expedient_download(tmploc)
 
         # Using the same code as reticulate:::miniconda_installer_run.
-        dir.create(dest_path, recursive = TRUE, showWarnings = FALSE)
+        dir.create2(dest_path)
         inst_args <- c("/InstallationType=JustMe", "/AddToPath=0",
             "/RegisterPython=0", "/S", "/NoRegistry=1",
             sprintf("/D=%s", utils::shortPathName(dest_path)))
@@ -124,7 +125,7 @@ installMiniconda <- function(installed=TRUE) {
         stop("Miniconda installation failed for an unknown reason")
     }
 
-    unlink(lock_file, force=TRUE)
+    unlink2(lock_file)
     TRUE 
 }
 
