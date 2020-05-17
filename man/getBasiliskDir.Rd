@@ -20,7 +20,7 @@ By default, Miniconda is installed to a location specified by \code{\link{getExt
 This ensures that R package build systems do not attempt to generate binaries that include the Miniconda installation;
 such binaries are not relocatable due to the presence of hard-coded paths, resulting in run-time failures.
 
-If the \code{BASILISK_EXTERNAL_ANACONDA} environment variable is set to a path to an existing Miniconda installation,
+If the \code{BASILISK_EXTERNAL_CONDA} environment variable is set to a path to an existing Miniconda installation,
 the function will return it directly without modification.
 This allows users to use their own Miniconda instances with \pkg{basilisk} but, 
 in turn, they are responsible for managing it.
