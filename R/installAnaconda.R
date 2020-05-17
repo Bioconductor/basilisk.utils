@@ -75,7 +75,7 @@ installMiniconda <- function(installed=TRUE) {
         #tmploc <- .expedient_download(file.path(base_url, inst_file))
 
         # I dunno, man. I'm just grasping at straws to avoid the Windows TIMEOUT.
-        inst_file <- "Anaconda3-2020.02-Windows-x86_64.exe" 
+        inst_file <- "Anaconda3-2019.10-Windows-x86_64.exe" 
         tmploc <- file.path("https://repo.anaconda.com/archive", inst_file)
         tmploc <- .expedient_download(tmploc)
 
