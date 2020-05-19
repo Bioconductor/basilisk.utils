@@ -1,7 +1,7 @@
-#' Install Miniconda 
+#' Install (Mini)conda 
 #'
-#' Install Miniconda (version 3, 2019.10) to a destination path that depends on the operating system.
-#' This skips the installation if said path already exists.
+#' Install conda - usually Miniconda, sometimes Anaconda - to an appropriate destination path,
+#' skipping the installation if said path already exists.
 #'
 #' @param installed Logical scalar indicating whether \pkg{basilisk} is already installed.
 #' Should only be set to \code{FALSE} in \pkg{basilisk} \code{configure} scripts.
@@ -9,34 +9,47 @@
 #' @details
 #' This function was originally created from code in \url{https://github.com/hafen/rminiconda},
 #' also borrowing code from \pkg{reticulate}'s \code{install_miniconda} for correct Windows installation.
-#' We use \pkg{BiocFileCache} if available to avoid redownloading the Miniconda installer upon \pkg{basilisk} re-installation.
+#' It downloads and runs an appropriate conda installer to create a conda instance for use by \pkg{basilisk}.
+#' We use \pkg{BiocFileCache} if available to avoid redownloading the installer upon \pkg{basilisk} re-installation.
 #'
-#' Whenever \code{installMiniconda} is re-run (and \code{BASILISK_USE_SYSTEM_DIR} is not set, see \code{?\link{getBasiliskDir}}),
-#' the previous Miniconda installation and its various \pkg{basilisk} environments are destroyed.
-#' This avoids duplication of Miniconda instances that would otherwise chew up disk space at 3 GB a pop.
-#' 
-#' After the destruction of the previous instance, we rely on the client packages to recreate their required environments.
-#' They should do this automatically if they are using \pkg{basilisk} correctly.
+#' Currently, the type and version of installer depends on the operating system:
+#' \itemize{
+#' \item On Linux, we use version 4.8.2 of the Miniconda3 installer.
+#' \item On MacOS, we use version 4.8.2 of the Miniconda3 installer, 
+#' followed by installation of \pkg{nomkl} package.
+#' This is necessary to avoid issues with Mojave notarization,
+#' see \url{https://github.com/rstudio/reticulate/issues/758}.
+#' \item On Windows, we use version 2019.10 of the Anaconda3 installer,
+#' as other versions (and Miniconda) cause TIMEOUTs on the Bioconductor build system.
+#' The reason for this behavior is unknown.
+#' }
+#'
+#' @section Destruction of old instances:
+#' Whenever \code{installConda} is re-run (and \code{BASILISK_USE_SYSTEM_DIR} is not set, see \code{?\link{getBasiliskDir}}),
+#' any previous conda instances and their associated \pkg{basilisk} environments are destroyed.
+#' This avoids duplication of large conda instances after their obselescence.
+#' Client packages are expected to recreate their environments in the latest conda instance.
 #'
 #' Users can disable this destruction by setting the \code{BASILISK_NO_DESTROY} environment variable to \code{"1"}.
 #' This may be necessary on rare occasions when running multiple R instances on the same Bioconductor release.
-#' (Setting this variable is not required for instances using different Bioconductor releases.)
+#' Note that setting this variable is not required for R instances using different Bioconductor releases;
+#' the destruction is smart enough to only remove conda instances generated from the same release.
 #'
 #' @return
-#' An Miniconda instance is created at the location specified by \code{\link{getBasiliskDir}}.
-#' Nothing is performed if the instance already exists.
+#' A conda instance is created at the location specified by \code{\link{getBasiliskDir}}.
+#' Nothing is performed if a complete instance already exists at that location.
 #' A logical scalar is returned indicating whether a new instance was created.
 #'  
 #' @author Aaron Lun
 #'
 #' @examples
-#' # We can't actually run installMiniconda() here, as it 
+#' # We can't actually run installConda() here, as it 
 #' # either relies on basilisk already being installed or
 #' # it has a hard-coded path to the basilisk system dir.
 #' print("dummy test to pass BiocCheck")
 #'
 #' @export
-installMiniconda <- function(installed=TRUE) {
+installConda <- function(installed=TRUE) {
     dest_path <- getBasiliskDir(installed=installed)
     lock_file <- getLockFile(dest_path)
 
@@ -45,18 +58,18 @@ installMiniconda <- function(installed=TRUE) {
             return(FALSE)
         }
 
-        warning(sprintf("replacing incomplete Miniconda installation at '%s'", dest_path))
+        warning(sprintf("replacing incomplete conda installation at '%s'", dest_path))
         unlink2(dest_path)
         unlink2(lock_file)
     }
 
     # If we're assuming that basilisk is installed, and we're using a system
-    # directory, and the Miniconda installation directory is missing, something
+    # directory, and the conda installation directory is missing, something
     # is clearly wrong. We check this here instead of in `getBasiliskDir()` to
-    # avoid throwing after an external install, given that `installMiniconda()`
+    # avoid throwing after an external install, given that `installConda()`
     # is usually called before `getBasiliskDir()`.
     if (installed && useSystemDir()) {
-        stop("Miniconda should have been installed during basilisk installation")
+        stop("conda should have been installed during basilisk installation")
     }
 
     if (!useSystemDir() && destroyOldVersions()) {
@@ -115,14 +128,14 @@ installMiniconda <- function(installed=TRUE) {
     # Rigorous checks for proper installation, heavily inspired if not outright
     # copied from reticulate::install_miniconda.
     if (status != 0) {
-        stop(sprintf("Miniconda installation failed with status code '%s'", status))
+        stop(sprintf("conda installation failed with status code '%s'", status))
     }
 
     conda.exists <- file.exists(getCondaBinary(dest_path))
     python.cmd <- getPythonBinary(dest_path)
     report <- system2(python.cmd, c("-E", "-c", shQuote("print(1)")), stdout=TRUE, stderr=FALSE)
     if (!conda.exists || report!="1") {
-        stop("Miniconda installation failed for an unknown reason")
+        stop("conda installation failed for an unknown reason")
     }
 
     unlink2(lock_file)
@@ -140,7 +153,7 @@ installMiniconda <- function(installed=TRUE) {
     if (is(fname, "try-error")) {
         tmploc <- file.path(tempdir(), basename(url))
         if (download.file(url, tmploc, mode="wb")) {
-            stop("failed to download the Miniconda installer")
+            stop("failed to download the conda installer")
         }
         fname <- tmploc
     }
