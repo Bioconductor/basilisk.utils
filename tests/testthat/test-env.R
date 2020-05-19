@@ -11,7 +11,7 @@ test_that("BASILISK_USE_SYSTEM_DIR works", {
     Sys.setenv(BASILISK_USE_SYSTEM_DIR="1")
     
     out <- getBasiliskDir(installed=FALSE)
-    expect_identical(basename(out), "anaconda")
+    expect_identical(basename(out), "conda")
 
     out <- getEnvironmentDir("whee", installed=FALSE)
     expect_identical(basename(out), "basilisk")
