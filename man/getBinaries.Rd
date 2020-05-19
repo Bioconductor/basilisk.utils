@@ -11,7 +11,7 @@ getCondaBinary(loc)
 getPythonBinary(loc)
 }
 \arguments{
-\item{loc}{String containing the path to the root of a conda installation or environment.}
+\item{loc}{String containing the path to the root of a conda instance or environment.}
 }
 \value{
 String containing the path to the conda or Python executable inside \code{loc}.

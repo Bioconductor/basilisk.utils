@@ -2,7 +2,7 @@
 % Please edit documentation in R/getBasiliskDir.R
 \name{getBasiliskDir}
 \alias{getBasiliskDir}
-\title{Get the \pkg{basilisk} Miniconda directory}
+\title{Get the \pkg{basilisk} conda directory}
 \usage{
 getBasiliskDir(installed = TRUE)
 }
@@ -10,29 +10,29 @@ getBasiliskDir(installed = TRUE)
 \item{installed}{Logical scalar indicating whether \pkg{basilisk} is already installed.}
 }
 \value{
-String containing the path to the Miniconda instance.
+String containing the path to the conda instance.
 }
 \description{
-Find the installation directory for the \pkg{basilisk}-managed Miniconda instance.
+Find the installation directory for the \pkg{basilisk}-managed conda instance.
 }
 \details{
-By default, Miniconda is installed to a location specified by \code{\link{getExternalDir}}.
-This ensures that R package build systems do not attempt to generate binaries that include the Miniconda installation;
+By default, conda is installed to a location specified by \code{\link{getExternalDir}}.
+This ensures that R package build systems do not attempt to generate binaries that include the conda instance;
 such binaries are not relocatable due to the presence of hard-coded paths, resulting in run-time failures.
 
-If the \code{BASILISK_EXTERNAL_CONDA} environment variable is set to a path to an existing Miniconda installation,
+If the \code{BASILISK_EXTERNAL_CONDA} environment variable is set to a path to an existing conda instance,
 the function will return it directly without modification.
-This allows users to use their own Miniconda instances with \pkg{basilisk} but, 
+This allows users to use their own conda instances with \pkg{basilisk} but, 
 in turn, they are responsible for managing it.
 
 If the \code{BASILISK_USE_SYSTEM_DIR} environment variable is set to \code{"1"},
 the function will return a path to a location inside the \code{basilisk} system installation directory.
-This is the ideal approach when installing from source as any Miniconda and \pkg{basilisk} re-installations are synchronized.
-It also ensures that any R process that can load \pkg{basilisk} will also have permissions to access the Miniconda instance,
+This is the ideal approach when installing from source as any conda and \pkg{basilisk} re-installations are synchronized.
+It also ensures that any R process that can load \pkg{basilisk} will also have permissions to access the conda instance,
 which makes life easier for sysadmins of clusters or other shared resources.
 
-We suggest always calling this function after an \code{\link{installMiniconda}} call,
-which guarantees the presence of the Miniconda installation directory (or dies trying).
+We suggest always calling this function after an \code{\link{installConda}} call,
+which guarantees the presence of the conda installation directory (or dies trying).
 Setting \code{installed=FALSE} should only happen inside the \pkg{basilisk} \code{configure} script.
 }
 \examples{

@@ -10,7 +10,7 @@ useSystemDir()
 Logical scalar providing an answer to the above.
 }
 \description{
-Should we use the R system directory for installing \pkg{basilisk}'s Miniconda instance or client environments?
+Should we use the R system directory for installing \pkg{basilisk}'s conda instance or client environments?
 }
 \details{
 The default value is \code{FALSE} to avoid problems with position-dependent code in packaged binaries.
