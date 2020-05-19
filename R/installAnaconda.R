@@ -72,7 +72,12 @@ installMiniconda <- function(installed=TRUE) {
     if (isWindows()) {
         arch <- if (.Machine$sizeof.pointer == 8) "x86_64" else "x86"
         inst_file <- sprintf("Miniconda3-%s-Windows-%s.exe", version, arch)
-        tmploc <- .expedient_download(file.path(base_url, inst_file))
+        #tmploc <- .expedient_download(file.path(base_url, inst_file))
+
+        # I dunno, man. I'm just grasping at straws to avoid the Windows TIMEOUT.
+        inst_file <- "Anaconda3-2019.10-Windows-x86_64.exe" 
+        tmploc <- file.path("https://repo.anaconda.com/archive", inst_file)
+        tmploc <- .expedient_download(tmploc)
 
         # Using the same code as reticulate:::miniconda_installer_run.
         dir.create(dest_path, recursive = TRUE, showWarnings = FALSE)
