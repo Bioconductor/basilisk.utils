@@ -29,8 +29,8 @@
 #' @importFrom rappdirs user_cache_dir 
 getExternalDir <- function() {
     pkg.v <- as.character(packageVersion("basilisk"))
-    inst_path <- Sys.getenv("BASILISK_EXTERNAL_DIR")
-    if (inst_path=="") {
+    inst_path <- Sys.getenv("BASILISK_EXTERNAL_DIR", NA)
+    if (is.na(inst_path)) {
         # Using "cache", not "data", as it doesn't have spaces on Mac.
         # Also getting rid of appauthor= and opinion= to keep the path low on Windows.
         user_cache_dir(appname="basilisk", appauthor=NULL, version=pkg.v, opinion=FALSE)

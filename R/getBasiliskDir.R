@@ -39,9 +39,9 @@
 #' Sys.setenv(BASILISK_USE_SYSTEM_DIR=old)
 #' @export
 getBasiliskDir <- function(installed=TRUE) { 
-    inst_path <- Sys.getenv("BASILISK_EXTERNAL_CONDA")
+    inst_path <- Sys.getenv("BASILISK_EXTERNAL_CONDA", NA)
 
-    if (identical(inst_path, "")) {
+    if (is.na(inst_path)) {
         if (!useSystemDir()) {
             inst_path <- getExternalDir()
             inst_path <- file.path(inst_path, "0") # keeping path short for Windows.
