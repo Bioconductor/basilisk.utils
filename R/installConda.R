@@ -50,17 +50,15 @@
 #'
 #' @export
 installConda <- function(installed=TRUE) {
+    # Locking the installation, exclusively if we think we need to create it.
     dest_path <- getBasiliskDir(installed=installed)
-    lock_file <- getLockFile(dest_path)
+    loc <- lockInstallation(exclusive=!file.exists(dest_path))
+    on.exit(unlockInstallation(loc))
 
+    # Re-checking the dest_path status, in case it was created while we were
+    # waiting for the lock to be released.
     if (file.exists(dest_path)) {
-        if (!file.exists(lock_file)) {
-            return(FALSE)
-        }
-
-        warning(sprintf("replacing incomplete conda installation at '%s'", dest_path))
-        unlink2(dest_path)
-        unlink2(lock_file)
+        return(FALSE)
     }
 
     # If we're assuming that basilisk is installed, and we're using a system
@@ -72,14 +70,21 @@ installConda <- function(installed=TRUE) {
         stop("conda should have been installed during basilisk installation")
     }
 
+    # We need to wipe out Conda installations for older versions of basilisk;
+    # we also need to destroy any stale installations and environments for the
+    # current version.
     if (!useSystemDir() && destroyOldVersions()) {
         clearExternalDir()
     }
 
     host <- dirname(dest_path)
-    unlink2(host)
+    unlink2(host) 
     dir.create2(host)
-    write(file=lock_file, x=character(0))
+
+    # Destroying the directory upon failure, to avoid difficult interpretations
+    # of any remnant installation directories when this function is hit again.
+    success <- FALSE
+    on.exit(if (!success) unlink2(dest_path, recursive=TRUE), add=TRUE, after=FALSE)
 
     version <- "py37_4.8.2"
     base_url <- "https://repo.anaconda.com/miniconda"
@@ -138,7 +143,7 @@ installConda <- function(installed=TRUE) {
         stop("conda installation failed for an unknown reason")
     }
 
-    unlink2(lock_file)
+    success <- TRUE
     TRUE 
 }
 
