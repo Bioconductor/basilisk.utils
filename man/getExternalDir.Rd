@@ -8,19 +8,23 @@ getExternalDir()
 }
 \value{
 String containing a path to an appropriate external folder.
+The last component of the path will always be the \pkg{basilisk} version number.
 }
 \description{
 Define an external location for installing the conda instance and \pkg{basilisk} environments.
 }
 \details{
-We add the version information so that re-installation of \pkg{basilisk} will install a new instance of conda.
+The default path contains the version number so that re-installation of \pkg{basilisk} will install a new instance of Conda.
 (This assumes that \pkg{basilisk} and \pkg{basilisk.utils} have synchronized version bumps.)
-See \code{\link{installConda}} for more details on how this external location is managed.
+See \code{\link{installConda}} for more details on how old versions of Conda are managed in this external directory.
 
 If the \code{BASILISK_EXTERNAL_DIR} environment variable is set to some location,
 this will be used instead as the installation directory.
 Setting this variable is occasionally necessary if the default path returned by \code{\link{user_cache_dir}} has spaces;
-or on Windows, if the 260 character limit is exceeded after combining the default path with deeply nested conda paths.
+or on Windows, if the 260 character limit is exceeded after combining the default path with deeply nested conda paths. 
+
+We assume that the user has read-write access to the external directory.
+Write access is necessary to generate new environments and to handle locking in \code{\link{lockInstallation}}.
 }
 \examples{
 # We can't actually run getExternalDir() here, as it 
@@ -29,7 +33,7 @@ print("dummy test to pass BiocCheck")
 
 }
 \seealso{
-\code{\link{getBasiliskDir}}, where this function is used for Windows or MacOSX.
+\code{\link{getBasiliskDir}}, to obtain the Conda installation directory.
 }
 \author{
 Aaron Lun
