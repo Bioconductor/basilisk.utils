@@ -11,7 +11,7 @@ installConda(installed = TRUE)
 Should only be set to \code{FALSE} in \pkg{basilisk} \code{configure} scripts.}
 }
 \value{
-A conda instance is created at the location specified by \code{\link{getBasiliskDir}}.
+A conda instance is created at the location specified by \code{\link{getCondaDir}}.
 Nothing is performed if a complete instance already exists at that location.
 A logical scalar is returned indicating whether a new instance was created.
 }
@@ -39,7 +39,7 @@ The reason for this behavior is unknown.
 }
 \section{Destruction of old instances}{
 
-Whenever \code{installConda} is re-run (and \code{BASILISK_USE_SYSTEM_DIR} is not set, see \code{?\link{getBasiliskDir}}),
+Whenever \code{installConda} is re-run (and \code{BASILISK_USE_SYSTEM_DIR} is not set, see \code{?\link{getCondaDir}}),
 any previous conda instances and their associated \pkg{basilisk} environments are destroyed.
 This avoids duplication of large conda instances after their obselescence.
 Client packages are expected to recreate their environments in the latest conda instance.
