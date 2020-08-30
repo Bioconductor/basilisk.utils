@@ -1,13 +1,13 @@
 #' Clear the external installation directory
 #'
-#' Clear the external installation directory by removing old conda instances or environments
+#' Clear the external installation directory by removing old Conda instances 
 #' installed for different versions of \pkg{basilisk} with the same middle version number
 #' (i.e., same Bioconductor release).
 #'
 #' @param path String containing the path to the latest version of the directory of interest.
 #'
 #' @details
-#' \code{clearObsoleteDir} can also be applied to the output of \code{\link{getEnvironmentDir}},
+#' \code{clearObsoleteDir} can also be applied to the directories for the individual Conda environments,
 #' as the package version is also suffixed onto those directory paths.
 #' This is useful for clearing out obsolete versions of package environments.
 #'
