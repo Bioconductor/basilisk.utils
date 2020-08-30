@@ -21,9 +21,8 @@ test_that("special dir.create2 works as expected", {
 })
 
 test_that("lockExternalDir works as expected", {
-    old <- Sys.getenv("BASILISK_EXTERNAL_DIR", NA)
     tmp <- tempfile()
-    Sys.setenv(BASILISK_EXTERNAL_DIR=tmp)
+    old <- setVariable("BASILISK_EXTERNAL_DIR", tmp)
 
     loc <- lockExternalDir()
     expect_true(file.exists(file.path(tmp, "00LOCK")))
@@ -36,9 +35,5 @@ test_that("lockExternalDir works as expected", {
     unlockExternalDir(loc1)
     unlockExternalDir(loc2)
 
-    if (is.na(old)) {
-        Sys.unsetenv("BASILISK_EXTERNAL_DIR") 
-    } else {
-        Sys.setenv(BASILISK_EXTERNAL_DIR=old)
-    }
+    setVariable("BASILISK_EXTERNAL_DIR", old)
 })

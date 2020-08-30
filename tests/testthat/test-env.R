@@ -2,22 +2,36 @@
 # library(testthat); library(basilisk.utils); source("test-env.R")
 
 test_that("BASILISK_EXTERNAL_CONDA works", {
-    Sys.setenv(BASILISK_EXTERNAL_CONDA="blah")
-    expect_identical('blah', getBasiliskDir(installed=FALSE))
-    Sys.unsetenv("BASILISK_EXTERNAL_CONDA")
+    old <- setVariable("BASILISK_EXTERNAL_CONDA", "blah")
+
+    expect_identical('blah', getCondaDir(installed=FALSE))
+
+    expect_false(installConda())
+
+    setVariable("BASILISK_EXTERNAL_CONDA", old)
 })
 
 test_that("BASILISK_USE_SYSTEM_DIR works", {
-    Sys.setenv(BASILISK_USE_SYSTEM_DIR="1")
+    old <- setVariable("BASILISK_USE_SYSTEM_DIR", NA)
+    expect_false(useSystemDir())
+
+    setVariable("BASILISK_USE_SYSTEM_DIR", "1")
+    expect_true(useSystemDir())
     
-    out <- getBasiliskDir(installed=FALSE)
+    out <- getCondaDir(installed=FALSE)
     expect_identical(basename(out), "conda")
 
-    out <- getEnvironmentDir("whee", installed=FALSE)
-    expect_identical(basename(out), "basilisk")
-    expect_identical(basename(dirname(out)), "whee")
+    setVariable("BASILISK_USE_SYSTEM_DIR", old)
+})
 
-    Sys.unsetenv("BASILISK_USE_SYSTEM_DIR")
+test_that("BASILISK_NO_DESTROY works", {
+    old <- setVariable("BASILISK_NO_DESTROY", NA)
+    expect_true(destroyOldVersions())
+
+    setVariable("BASILISK_NO_DESTROY", "1")
+    expect_false(destroyOldVersions())
+
+    setVariable("BASILISK_NO_DESTROY", old)
 })
 
 test_that("BASILISK_EXTERNAL_DIR works", {
