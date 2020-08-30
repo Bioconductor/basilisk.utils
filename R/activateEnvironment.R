@@ -3,7 +3,7 @@
 #' Mimic the (de)activation of a conda environment by modifying environment variables in the current R process.
 #'
 #' @param envpath String containing the path to the conda environment to activate.
-#' If \code{NULL}, the base conda instance at \code{\link{getBasiliskDir}()} is activated.
+#' If \code{NULL}, the base conda instance at \code{\link{getCondaDir}()} is activated.
 #' @param listing Named list of strings containing name:value pairs for environment variables.
 #'
 #' @details
@@ -63,13 +63,13 @@ activateEnvironment <- function(envpath=NULL) {
 #' @importFrom utils getFromNamespace
 .activate_condaenv <- function(listing, envpath) {
     if (isWindows()) {
-        act.bat <- file.path(getBasiliskDir(), "condabin", "conda.bat")
+        act.bat <- file.path(getCondaDir(), "condabin", "conda.bat")
         act.cmd <- c(shQuote(act.bat), "activate")
         if (!is.null(envpath)) {
             act.cmd <- c(act.cmd, shQuote(envpath))
         }
     } else {
-        profile.sh <- file.path(getBasiliskDir(), "etc", "profile.d", "conda.sh")
+        profile.sh <- file.path(getCondaDir(), "etc", "profile.d", "conda.sh")
         act.cmd <- c(".", shQuote(profile.sh), "&&", "conda", "activate")
         if (!is.null(envpath)) {
             act.cmd <- c(act.cmd, shQuote(envpath))

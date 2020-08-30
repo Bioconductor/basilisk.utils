@@ -33,7 +33,7 @@ isMacOSX <- function() {
 #' @author Aaron Lun
 #'
 #' @seealso
-#' \code{\link{getBasiliskDir}} and \code{\link{getEnvironmentDir}}, where this function is used.
+#' \code{\link{getCondaDir}} and \code{\link{getEnvironmentDir}}, where this function is used.
 #'
 #' @export
 useSystemDir <- function() {

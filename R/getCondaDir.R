@@ -1,6 +1,6 @@
-#' Get the \pkg{basilisk} conda directory
+#' Get the \pkg{basilisk} Conda directory
 #'
-#' Find the installation directory for the \pkg{basilisk}-managed conda instance.
+#' Find the installation directory for the \pkg{basilisk}-managed Conda instance.
 #'
 #' @param installed Logical scalar indicating whether \pkg{basilisk} is already installed.
 #'
@@ -34,12 +34,12 @@
 #' old <- Sys.getenv("BASILISK_USE_SYSTEM_DIR")
 #' Sys.setenv(BASILISK_USE_SYSTEM_DIR=1)
 #'
-#' getBasiliskDir(installed=FALSE)
+#' getCondaDir(installed=FALSE)
 #'
 #' Sys.setenv(BASILISK_USE_SYSTEM_DIR=old)
 #' @export
-getBasiliskDir <- function(installed=TRUE) { 
-    inst_path <- Sys.getenv("BASILISK_EXTERNAL_CONDA", NA)
+getCondaDir <- function(installed=TRUE) { 
+    inst_path <- .get_external_conda()
 
     if (is.na(inst_path)) {
         if (!useSystemDir()) {
@@ -52,4 +52,8 @@ getBasiliskDir <- function(installed=TRUE) {
     }
 
     inst_path
+}
+
+.get_external_conda <- function() {
+    Sys.getenv("BASILISK_EXTERNAL_CONDA", NA)
 }

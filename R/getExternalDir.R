@@ -21,7 +21,7 @@
 #' @author Aaron Lun
 #'
 #' @seealso
-#' \code{\link{getBasiliskDir}}, to obtain the Conda installation directory. 
+#' \code{\link{getCondaDir}}, to obtain the Conda installation directory. 
 #' 
 #' @examples
 #' # We can't actually run getExternalDir() here, as it 

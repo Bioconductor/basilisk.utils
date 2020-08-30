@@ -25,7 +25,7 @@
 #' }
 #'
 #' @section Destruction of old instances:
-#' Whenever \code{installConda} is re-run (and \code{BASILISK_USE_SYSTEM_DIR} is not set, see \code{?\link{getBasiliskDir}}),
+#' Whenever \code{installConda} is re-run (and \code{BASILISK_USE_SYSTEM_DIR} is not set, see \code{?\link{getCondaDir}}),
 #' any previous conda instances and their associated \pkg{basilisk} environments are destroyed.
 #' This avoids duplication of large conda instances after their obselescence.
 #' Client packages are expected to recreate their environments in the latest conda instance.
@@ -36,7 +36,7 @@
 #' the destruction is smart enough to only remove conda instances generated from the same release.
 #'
 #' @return
-#' A conda instance is created at the location specified by \code{\link{getBasiliskDir}}.
+#' A conda instance is created at the location specified by \code{\link{getCondaDir}}.
 #' Nothing is performed if a complete instance already exists at that location.
 #' A logical scalar is returned indicating whether a new instance was created.
 #'  
@@ -50,6 +50,12 @@
 #'
 #' @export
 installConda <- function(installed=TRUE) {
+    if (!is.na(.get_external_conda())) {
+        return(FALSE)
+    }
+
+    dest_path <- getCondaDir(installed=installed)
+
     # Locking the installation, exclusively if we think we need to create it.
     dest_path <- getBasiliskDir(installed=installed)
     loc <- lockInstallation(exclusive=!file.exists(dest_path))
@@ -63,9 +69,9 @@ installConda <- function(installed=TRUE) {
 
     # If we're assuming that basilisk is installed, and we're using a system
     # directory, and the conda installation directory is missing, something
-    # is clearly wrong. We check this here instead of in `getBasiliskDir()` to
+    # is clearly wrong. We check this here instead of in `getCondaDir()` to
     # avoid throwing after an external install, given that `installConda()`
-    # is usually called before `getBasiliskDir()`.
+    # is usually called before `getCondaDir()`.
     if (installed && useSystemDir()) {
         stop("conda should have been installed during basilisk installation")
     }
