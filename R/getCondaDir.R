@@ -46,7 +46,7 @@ getCondaDir <- function(installed=TRUE) {
             inst_path <- getExternalDir()
             inst_path <- file.path(inst_path, "0") # keeping path short for Windows.
         } else {
-            inst_path <- .fetch_system_dir("basilisk", installed)
+            inst_path <- getSystemDir("basilisk", installed)
             inst_path <- file.path(inst_path, "conda")
         }
     }
