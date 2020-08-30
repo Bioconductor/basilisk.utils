@@ -1,6 +1,6 @@
 Package: basilisk.utils
-Version: 1.1.8
-Date: 2020-08-28
+Version: 1.1.9
+Date: 2020-08-30
 Title: Basilisk Installation Utilities
 Authors@R: c(person("Aaron", "Lun", role=c("aut", "cre", "cph"),
         email="infinite.monkeys.with.keyboards@gmail.com"))
@@ -17,10 +17,11 @@ Suggests:
     BiocFileCache
 biocViews: Infrastructure
 Description: 
-    Implements utilities for installation of the basilisk package, primarily to
+    Implements utilities for installation of the basilisk package, primarily 
+    for creation of the underlying Conda instance. This allows us to
     avoid re-writing the same R code in both the configure script (for
     centrally administered R installations) and in the lazy installation
-    mechanism (for distributed binaries). It is highly unlikely that developers
+    mechanism (for distributed package binaries). It is highly unlikely that developers
     - or, heaven forbid, end-users! - will need to interact with this package
     directly; they should be using the basilisk package instead.
 License: GPL-3
