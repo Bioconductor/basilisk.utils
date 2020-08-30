@@ -54,16 +54,18 @@ installConda <- function(installed=TRUE) {
         return(FALSE)
     }
 
+    dest_path <- getCondaDir(installed=installed)
+
     if (!useSystemDir()) {
         # Locking the installation; this ensures we will wait for any
-        # concurrently running installations to finish. Do NOT try to be fancy
-        # and make this a shared lock, as lock() errors out if you try to apply
-        # an exclusive and non-exclusive lock to the same file.
-        loc <- lockExternalDir()
+        # concurrently running installations to finish. 
+        loc <- lockExternalDir(exclusive=!file.exists(dest_path))
         on.exit(unlockExternalDir(loc))
     }
 
-    dest_path <- getCondaDir(installed=installed)
+    # Do NOT assign the existence of dest_path to a variable for re-use in the
+    # locking call above. We want to recheck existance just in case the
+    # directory was created after waiting to acquire the lock.
     if (file.exists(dest_path)) {
         return(FALSE)
     }
