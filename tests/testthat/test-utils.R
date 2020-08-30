@@ -20,8 +20,25 @@ test_that("special dir.create2 works as expected", {
     expect_error(dir.create2(tmp), 'failed to create')
 })
 
-test_that("lockInstallation works as expected", {
-    # Can't test for lockfile creation as BASILISK_USE_SYSTEM_DIR might be 1.
-    loc <- lockInstallation()
-    expect_null(unlockInstallation(loc))
+test_that("lockExternalDir works as expected", {
+    old <- Sys.getenv("BASILISK_EXTERNAL_DIR", NA)
+    tmp <- tempfile()
+    Sys.setenv(BASILISK_EXTERNAL_DIR=tmp)
+
+    loc <- lockExternalDir()
+    expect_true(file.exists(file.path(tmp, "00LOCK")))
+    expect_error(lockExternalDir(exclusive=FALSE), "exclusive")
+    expect_null(unlockExternalDir(loc))
+
+    loc1 <- lockExternalDir(exclusive=FALSE)
+    loc2 <- lockExternalDir(exclusive=FALSE)
+    expect_error(lockExternalDir(exclusive=TRUE), "shared")
+    unlockExternalDir(loc1)
+    unlockExternalDir(loc2)
+
+    if (is.na(old)) {
+        Sys.unsetenv("BASILISK_EXTERNAL_DIR") 
+    } else {
+        Sys.setenv(BASILISK_EXTERNAL_DIR=old)
+    }
 })
