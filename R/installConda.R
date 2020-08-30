@@ -57,9 +57,10 @@ installConda <- function(installed=TRUE) {
     dest_path <- getCondaDir(installed=installed)
 
     # Locking the installation, exclusively if we think we need to create it.
-    dest_path <- getBasiliskDir(installed=installed)
-    loc <- lockInstallation(exclusive=!file.exists(dest_path))
-    on.exit(unlockInstallation(loc))
+    if (!useSystemDir()) {
+        loc <- lockExternalDir(exclusive=!file.exists(dest_path))
+        on.exit(unlockExternalDir(loc))
+    }
 
     # Re-checking the dest_path status, in case it was created while we were
     # waiting for the lock to be released.

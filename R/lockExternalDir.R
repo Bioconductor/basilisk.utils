@@ -1,16 +1,14 @@
-#' Lock installation
+#' Lock external directory 
 #'
-#' Lock the Conda directory so that multiple processes cannot try to install at the same time.
+#' Lock the external Conda installation directory so that multiple processes cannot try to install at the same time.
 #'
 #' @param ... Further arguments to pass to \code{\link{lock}}, such as \code{exclusive}.
-#' @param lock An existing \code{filelock_lock} object, or \code{NULL}.
+#' @param lock An existing \code{filelock_lock} object.
 #'
 #' @return 
-#' \code{lockInstallation} will return a \code{filelock_lock} object from \code{\link{lock}}.
-#' If \code{BASILISK_USE_SYSTEM_DIR=1}, it returns \code{NULL} instead.
+#' \code{lockExternalDir} will return a \code{filelock_lock} object from \code{\link{lock}}.
 #' 
-#' \code{unlockInstallation} will unlock the file and return \code{NULL} invisibly.
-#' If \code{lock=NULL}, this is a no-op.
+#' \code{unlockExternalDir} will unlock the file and return \code{NULL} invisibly.
 #'
 #' @details
 #' This will apply a lock to the (possibly user-specified) external directory,
@@ -35,28 +33,24 @@
 #' @author Aaron Lun
 #'
 #' @examples
-#' loc <- lockInstallation()
-#' unlockInstallation(loc)
+#' loc <- lockExternalDir()
+#' unlockExternalDir(loc)
 #'
 #' @export
 #' @importFrom filelock lock unlock
-lockInstallation <- function(...) {
-    if (!useSystemDir()) {
-        # Global lock, going above the version number in getExternalDir().
-        # This is because getExternalDir() itself might get deleted in
-        # installConda(), and you can't lock a file in a non-existent dir.
-        dir <- dirname(getExternalDir()) 
-        dir.create(dir, recursive=TRUE, showWarnings=FALSE)
-        lock.path <- file.path(dir, "00LOCK")
-        lock(lock.path, ...)
-    } else {
-        NULL
-    }
+lockExternalDir <- function(...) {
+    # Global lock, going above the version number in getExternalDir().
+    # This is because getExternalDir() itself might get deleted in
+    # installConda(), and you can't lock a file in a non-existent dir.
+    dir <- dirname(getExternalDir()) 
+    dir.create(dir, recursive=TRUE, showWarnings=FALSE)
+    lock.path <- file.path(dir, "00LOCK")
+    lock(lock.path, ...)
 }
 
 #' @export
-#' @rdname lockInstallation
-unlockInstallation <- function(lock) {
+#' @rdname lockExternalDir
+unlockExternalDir <- function(lock) {
     if (!is.null(lock)) {
         unlock(lock)
     }
