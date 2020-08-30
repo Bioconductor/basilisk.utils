@@ -11,7 +11,7 @@
 #' @return String containing the path to the (likely, if \code{installed=FALSE}) installation directory for \code{pkgname}.
 #'
 #' @examples
-#' getSystemDir("basilisk")
+#' getSystemDir("basilisk", installed=FALSE)
 #' 
 #' @export
 getSystemDir <- function(pkgname, installed) {

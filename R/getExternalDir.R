@@ -16,7 +16,7 @@
 #' or on Windows, if the 260 character limit is exceeded after combining the default path with deeply nested conda paths. 
 #'
 #' We assume that the user has read-write access to the external directory.
-#' Write access is necessary to generate new environments and to handle locking in \code{\link{lockInstallation}}.
+#' Write access is necessary to generate new environments and to handle locking in \code{\link{lockExternalDir}}.
 #'
 #' @author Aaron Lun
 #'
