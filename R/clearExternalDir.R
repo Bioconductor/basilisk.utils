@@ -42,15 +42,19 @@ clearObsoleteDir <- function(path=getExternalDir()) {
 }
 
 .destroy_major_analogues <- function(path, save) {
-    major.v <- sub("\\.[0-9]+$", "", basename(path))
-    all.candidates <- list.files(dirname(path), full.names=TRUE, pattern=paste0("^", major.v))
+    pattern <- "([0-9]+\\.[0-9]+)\\.[0-9]+$" # Bioconductor version pattern.
+    major.v <- sub(pattern, "\\1", basename(path))
+    all.candidates <- list.files(dirname(path))
+    all.major.v <- sub(pattern, "\\1", all.candidates)
+    all.candidates <- all.candidates[all.major.v==major.v]
 
     if (save) {
         # Not using setdiff to avoid problems with path 
         # normalization on - you guessed it! - Windows.
-        keep <- basename(all.candidates) != basename(path) 
+        keep <- all.candidates != basename(path)
         all.candidates <- all.candidates[keep]
     }
 
+    all.candidates <- file.path(dirname(path), all.candidates)
     unlink2(all.candidates)
 }
