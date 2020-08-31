@@ -47,7 +47,7 @@ lockExternalDir <- function(...) {
     # This is because getExternalDir() itself might get deleted in
     # installConda(), and you can't lock a file in a non-existent dir.
     dir <- dirname(getExternalDir()) 
-    dir.create(dir, recursive=TRUE, showWarnings=FALSE)
+    dir.create2(dir, recursive=TRUE, showWarnings=FALSE)
     lock.path <- file.path(dir, "00LOCK")
     lock(lock.path, ...)
 }
