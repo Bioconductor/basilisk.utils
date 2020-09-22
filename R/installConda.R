@@ -146,6 +146,11 @@ installConda <- function(installed=TRUE) {
     }
 
     conda.exists <- file.exists(getCondaBinary(dest_path))
+    if (conda.exists && isWindows()) {
+        # Sometimes Windows doesn't create this file. Why? WHO KNOWS.
+        conda.exists <- file.exists(file.path(dest_path, "condabin/conda.bat"))
+    }
+
     python.cmd <- getPythonBinary(dest_path)
     report <- system2(python.cmd, c("-E", "-c", shQuote("print(1)")), stdout=TRUE, stderr=FALSE)
     if (!conda.exists || report!="1") {
