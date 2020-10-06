@@ -25,17 +25,9 @@ also borrowing code from \pkg{reticulate}'s \code{install_miniconda} for correct
 It downloads and runs an appropriate conda installer to create a conda instance for use by \pkg{basilisk}.
 We use \pkg{BiocFileCache} if available to avoid redownloading the installer upon \pkg{basilisk} re-installation.
 
-Currently, the type and version of installer depends on the operating system:
-\itemize{
-\item On Linux, we use version 4.8.2 of the Miniconda3 installer.
-\item On MacOS, we use version 4.8.2 of the Miniconda3 installer, 
-followed by installation of \pkg{nomkl} package.
-This is necessary to avoid issues with Mojave notarization,
+Currently, we use version 4.8.3 of the Miniconda3 installer.
+On MacOS, this is followed by installation of \pkg{nomkl} package to avoid issues with notarization,
 see \url{https://github.com/rstudio/reticulate/issues/758}.
-\item On Windows, we use version 2019.10 of the Anaconda3 installer,
-as other versions (and Miniconda) cause TIMEOUTs on the Bioconductor build system.
-The reason for this behavior is unknown.
-}
 }
 \section{Destruction of old instances}{
 

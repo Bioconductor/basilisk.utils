@@ -11,18 +11,7 @@
 #' also borrowing code from \pkg{reticulate}'s \code{install_miniconda} for correct Windows installation.
 #' It downloads and runs an appropriate conda installer to create a conda instance for use by \pkg{basilisk}.
 #' We use \pkg{BiocFileCache} if available to avoid redownloading the installer upon \pkg{basilisk} re-installation.
-#'
-#' Currently, the type and version of installer depends on the operating system:
-#' \itemize{
-#' \item On Linux, we use version 4.8.2 of the Miniconda3 installer.
-#' \item On MacOS, we use version 4.8.2 of the Miniconda3 installer, 
-#' followed by installation of \pkg{nomkl} package.
-#' This is necessary to avoid issues with Mojave notarization,
-#' see \url{https://github.com/rstudio/reticulate/issues/758}.
-#' \item On Windows, we use version 2019.10 of the Anaconda3 installer,
-#' as other versions (and Miniconda) cause TIMEOUTs on the Bioconductor build system.
-#' The reason for this behavior is unknown.
-#' }
+#' Currently, we use version 4.8.3 of the Miniconda3 installer.
 #'
 #' @section Destruction of old instances:
 #' Whenever \code{installConda} is re-run (and \code{BASILISK_USE_SYSTEM_DIR} is not set, see \code{?\link{getCondaDir}}),
@@ -95,18 +84,13 @@ installConda <- function(installed=TRUE) {
     success <- FALSE
     on.exit(if (!success) unlink2(dest_path, recursive=TRUE), add=TRUE, after=FALSE)
 
-    version <- "py37_4.8.2"
+    version <- "py37_4.8.3"
     base_url <- "https://repo.anaconda.com/miniconda"
 
     if (isWindows()) {
         arch <- if (.Machine$sizeof.pointer == 8) "x86_64" else "x86"
         inst_file <- sprintf("Miniconda3-%s-Windows-%s.exe", version, arch)
-        #tmploc <- .expedient_download(file.path(base_url, inst_file))
-
-        # I dunno, man. I'm just grasping at straws to avoid the Windows TIMEOUT.
-        inst_file <- "Anaconda3-2019.10-Windows-x86_64.exe" 
-        tmploc <- file.path("https://repo.anaconda.com/archive", inst_file)
-        tmploc <- .expedient_download(tmploc)
+        tmploc <- .expedient_download(file.path(base_url, inst_file))
 
         # Using the same code as reticulate:::miniconda_installer_run.
         dir.create2(dest_path)
@@ -123,20 +107,7 @@ installConda <- function(installed=TRUE) {
 
         tmploc <- .expedient_download(file.path(base_url, inst_file))
         inst_args <- sprintf(" %s -b -p %s", tmploc, dest_path)
-
-        if (is_mac) {
-            # The prebuilt R binary for Mac seems to set this variable,
-            # which causes default paths for zlib to be ignored and breaks
-            # installation. So, we unset it before attempting installation.
-            status <- system(paste("unset DYLD_FALLBACK_LIBRARY_PATH; bash", inst_args))
-
-            # Eliminating MKL from the installation, see https://github.com/rstudio/reticulate/issues/758.
-            # This is done by following advice in https://docs.anaconda.com/mkl-optimizations/.
-            conda.bin <- getCondaBinary(dest_path)
-            system2(conda.bin, c("install", "--yes", "--no-update-deps", "nomkl"))
-        } else {
-            status <- system2("bash", inst_args)
-        }
+        status <- system2("bash", inst_args)
     }
 
     # Rigorous checks for proper installation, heavily inspired if not outright

@@ -6,6 +6,8 @@
 \item Migrated most environment-related functions to \pkg{basilisk}.
 
 \item Added locking to \code{installConda()} for safe parallel lazy Conda installations.
+
+\item Switched to the latest Miniconda3 installer.
 }}
 
 \section{Version 1.0.0}{\itemize{
