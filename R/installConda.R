@@ -1,6 +1,6 @@
 #' Install (Mini)conda 
 #'
-#' Install conda - usually Miniconda, sometimes Anaconda - to an appropriate destination path,
+#' Install conda - specifically Miniconda, though historically we used Anaconda - to an appropriate destination path,
 #' skipping the installation if said path already exists.
 #'
 #' @param installed Logical scalar indicating whether \pkg{basilisk} is already installed.
@@ -9,9 +9,14 @@
 #' @details
 #' This function was originally created from code in \url{https://github.com/hafen/rminiconda},
 #' also borrowing code from \pkg{reticulate}'s \code{install_miniconda} for correct Windows installation.
-#' It downloads and runs an appropriate conda installer to create a conda instance for use by \pkg{basilisk}.
-#' We use \pkg{BiocFileCache} if available to avoid redownloading the installer upon \pkg{basilisk} re-installation.
+#' It downloads and runs a Miniconda installer to create a dedicated Conda instance that is managed by \pkg{basilisk},
+#' separate from other instances that might be available on the system.
 #' Currently, we use version 4.8.3 of the Miniconda3 installer.
+#'
+#' The installer itself is cached to avoid re-downloading it when, e.g., re-installing \pkg{basilisk} across separate R sessions.
+#' Users can obtain/delete the cached installer by looking at the contents of the parent directory of \code{\link{getExternalDir}}.
+#' This caching behavior is disabled for system installations (see \code{\link{useSystemDir}}), which touch nothing except the system directories;
+#' in such cases, only repeated installation attempts in the same R session will re-use the same installer.
 #'
 #' @section Destruction of old instances:
 #' Whenever \code{installConda} is re-run (and \code{BASILISK_USE_SYSTEM_DIR} is not set, see \code{?\link{getCondaDir}}),
@@ -135,17 +140,15 @@ installConda <- function(installed=TRUE) {
 #' @importFrom utils download.file
 #' @importFrom methods is
 .expedient_download <- function(url) {
-    fname <- try({
-        bfc <- BiocFileCache::BiocFileCache(ask=FALSE)
-        BiocFileCache::bfcrpath(bfc, url) 
-    }, silent=TRUE)
+    if (useSystemDir()) {
+        dir <- tempdir()
+    } else {
+        dir <- dirname(getExternalDir())
+    }
 
-    if (is(fname, "try-error")) {
-        tmploc <- file.path(tempdir(), basename(url))
-        if (download.file(url, tmploc, mode="wb")) {
-            stop("failed to download the conda installer")
-        }
-        fname <- tmploc
+    fname <- file.path(dir, basename(url))
+    if (!file.exists(fname) && download.file(url, fname, mode="wb")) {
+        stop("failed to download the conda installer")
     }
 
     fname

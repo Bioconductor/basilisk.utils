@@ -2,6 +2,11 @@
 \title{basilisk.utils News}
 \encoding{UTF-8}
 
+\section{Version 1.4.0}{\itemize{
+\item Avoid caching the installer when performing a system installation.
+Otherwise, cache in the external directory to avoid requiring/polluting \pkg{BiocFileCache}'s cache.
+}}
+
 \section{Version 1.2.0}{\itemize{
 \item Migrated most environment-related functions to \pkg{basilisk}.
 
