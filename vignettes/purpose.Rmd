@@ -7,7 +7,6 @@ date: "Revised: March 6, 2020"
 output:
   BiocStyle::html_document
 package: basilisk.utils
-bibliography: 
 vignette: >
   %\VignetteIndexEntry{_basilisk_ installation utilities}
   %\VignetteEngine{knitr::rmarkdown}
