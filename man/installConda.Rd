@@ -16,18 +16,20 @@ Nothing is performed if a complete instance already exists at that location.
 A logical scalar is returned indicating whether a new instance was created.
 }
 \description{
-Install conda - usually Miniconda, sometimes Anaconda - to an appropriate destination path,
+Install conda - specifically Miniconda, though historically we used Anaconda - to an appropriate destination path,
 skipping the installation if said path already exists.
 }
 \details{
 This function was originally created from code in \url{https://github.com/hafen/rminiconda},
 also borrowing code from \pkg{reticulate}'s \code{install_miniconda} for correct Windows installation.
-It downloads and runs an appropriate conda installer to create a conda instance for use by \pkg{basilisk}.
-We use \pkg{BiocFileCache} if available to avoid redownloading the installer upon \pkg{basilisk} re-installation.
-
+It downloads and runs a Miniconda installer to create a dedicated Conda instance that is managed by \pkg{basilisk},
+separate from other instances that might be available on the system.
 Currently, we use version 4.8.3 of the Miniconda3 installer.
-On MacOS, this is followed by installation of \pkg{nomkl} package to avoid issues with notarization,
-see \url{https://github.com/rstudio/reticulate/issues/758}.
+
+The installer itself is cached to avoid re-downloading it when, e.g., re-installing \pkg{basilisk} across separate R sessions.
+Users can obtain/delete the cached installer by looking at the contents of the parent directory of \code{\link{getExternalDir}}.
+This caching behavior is disabled for system installations (see \code{\link{useSystemDir}}), which touch nothing except the system directories;
+in such cases, only repeated installation attempts in the same R session will re-use the same installer.
 }
 \section{Destruction of old instances}{
 
