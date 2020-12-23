@@ -93,8 +93,10 @@ installConda <- function(installed=TRUE) {
     base_url <- "https://repo.anaconda.com/miniconda"
 
     if (isWindows()) {
-        arch <- if (.Machine$sizeof.pointer == 8) "x86_64" else "x86"
-        inst_file <- sprintf("Miniconda3-%s-Windows-%s.exe", version, arch)
+        if (.Machine$sizeof.pointer != 8) {
+            stop("Windows 32-bit architectures not supported by basilisk")
+        }
+        inst_file <- sprintf("Miniconda3-%s-Windows-x86_64.exe", version)
         tmploc <- .expedient_download(file.path(base_url, inst_file))
 
         # Using the same code as reticulate:::miniconda_installer_run.
@@ -106,8 +108,7 @@ installConda <- function(installed=TRUE) {
         status <- system2(tmploc, inst_args)
 
     } else {
-        is_mac <- isMacOSX()
-        sysname <- if (is_mac) "MacOSX" else "Linux"
+        sysname <- if (isMacOSX()) "MacOSX" else "Linux"
         inst_file <- sprintf("Miniconda3-%s-%s-x86_64.sh", version, sysname)
 
         tmploc <- .expedient_download(file.path(base_url, inst_file))

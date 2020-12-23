@@ -3,8 +3,10 @@
 \encoding{UTF-8}
 
 \section{Version 1.4.0}{\itemize{
-\item Avoid caching the installer when performing a system installation.
+\item Avoid caching the installer when performing a system installation in \code{installConda()}.
 Otherwise, cache in the external directory to avoid requiring/polluting \pkg{BiocFileCache}'s cache.
+
+\item Officially give up on Windows 32-bit support in \code{installConda()}.
 }}
 
 \section{Version 1.2.0}{\itemize{
