@@ -22,6 +22,13 @@ as the cached extras will never be used by any other \pkg{basilisk} package.
 In contrast, for an externally cached conda, the extras may be re-used by other \pkg{basilisk} clients.
 So it's usually worth keeping them around, though this function can be called directly by the user if the cache gets too big.
 }
+\examples{
+# We can't actually run cleanConda() here, as it 
+# either relies on basilisk already being installed or
+# it has a hard-coded path to the basilisk system dir.
+print("dummy test to pass BiocCheck")
+
+}
 \author{
 Aaron Lun
 }

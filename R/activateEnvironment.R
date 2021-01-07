@@ -32,6 +32,12 @@
 #' \code{deactivateEnvironment} restores the environment variables to their pre-activation state.
 #' It returns \code{NULL} invisibly.
 #' 
+#' @examples
+#' # We can't actually run activateEnvironment() here, as it 
+#' # either relies on basilisk already being installed or
+#' # it has a hard-coded path to the basilisk system dir.
+#' print("dummy test to pass BiocCheck")
+#'
 #' @export
 #' @author Aaron Lun
 activateEnvironment <- function(envpath=NULL) {

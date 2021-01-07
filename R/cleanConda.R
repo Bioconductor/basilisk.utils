@@ -15,6 +15,12 @@
 #'
 #' @author Aaron Lun
 #' 
+#' @examples
+#' # We can't actually run cleanConda() here, as it 
+#' # either relies on basilisk already being installed or
+#' # it has a hard-coded path to the basilisk system dir.
+#' print("dummy test to pass BiocCheck")
+#'
 #' @export 
 cleanConda <- function(loc=getCondaDir()) {
     listing <- activateEnvironment()

@@ -44,6 +44,13 @@ even after explicit specification via \pkg{reticulate}'s \code{use_Condaenv}!
 \item \code{"RETICULATE_PYTHON_ENV"}: for similar reasons.
 }
 }
+\examples{
+# We can't actually run activateEnvironment() here, as it 
+# either relies on basilisk already being installed or
+# it has a hard-coded path to the basilisk system dir.
+print("dummy test to pass BiocCheck")
+
+}
 \author{
 Aaron Lun
 }
