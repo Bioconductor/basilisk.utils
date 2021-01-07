@@ -136,8 +136,13 @@ installConda <- function(installed=TRUE) {
         stop("conda installation failed for an unknown reason")
     }
 
-    # Cleaning the system install, because we're never going to use the cache again.
     if (is.system) {
+        # Cleaning the system install, because we're never going to use the
+        # cache again; clients use their own cache directories. We need to
+        # specify the directory manually otherwise conda goes looking in
+        # ~/.conda/pkgs, and a system install shouldn't touch that.
+        old <- setCondaPackageDir(file.path(dest_path, "pkgs"))
+        on.exit(setCondaPackageDir(old))
         cleanConda()
     }
 
