@@ -145,6 +145,7 @@ activateEnvironment <- function(envpath=NULL) {
     listing
 }
 
+#' @export
 #' @rdname activateEnvironment
 deactivateEnvironment <- function(listing) {
     for (x in names(listing)) {
