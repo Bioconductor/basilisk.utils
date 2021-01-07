@@ -50,9 +50,11 @@ installConda <- function(installed=TRUE) {
 
     dest_path <- getCondaDir(installed=installed)
 
-    if (!useSystemDir()) {
+    is.system <- useSystemDir()
+    if (!is.system) {
         # Locking the installation; this ensures we will wait for any
-        # concurrently running installations to finish. 
+        # concurrently running installations to finish. For system installs,
+        # this isn't necessary as the R package locks take care of it.
         loc <- lockExternalDir(exclusive=!file.exists(dest_path))
         on.exit(unlockExternalDir(loc))
     }
@@ -69,7 +71,7 @@ installConda <- function(installed=TRUE) {
     # is clearly wrong. We check this here instead of in `getCondaDir()` to
     # avoid throwing after an external install, given that `installConda()`
     # is usually called before `getCondaDir()`.
-    if (installed && useSystemDir()) {
+    if (installed && is.system) {
         stop("conda should have been installed during basilisk installation")
     }
 
@@ -132,6 +134,11 @@ installConda <- function(installed=TRUE) {
     report <- system2(python.cmd, c("-E", "-c", shQuote("print(1)")), stdout=TRUE, stderr=FALSE)
     if (!conda.exists || report!="1") {
         stop("conda installation failed for an unknown reason")
+    }
+
+    # Cleaning the system install, because we're never going to use the cache again.
+    if (is.system) {
+        cleanConda()
     }
 
     success <- TRUE
