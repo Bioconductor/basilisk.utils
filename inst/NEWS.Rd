@@ -7,6 +7,12 @@
 Otherwise, cache in the external directory to avoid requiring/polluting \pkg{BiocFileCache}'s cache.
 
 \item Officially give up on Windows 32-bit support in \code{installConda()}.
+
+\item Migrated \code{activateEnvironment()} back here, from \pkg{basilisk}.
+
+\item Added \code{cleanConda()} utility to clean the Conda environment.
+
+\item Added \code{setCondaPackageDir()} to set the Conda package cache directory.
 }}
 
 \section{Version 1.2.0}{\itemize{
