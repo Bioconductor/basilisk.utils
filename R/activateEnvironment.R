@@ -32,6 +32,7 @@
 #' \code{deactivateEnvironment} restores the environment variables to their pre-activation state.
 #' It returns \code{NULL} invisibly.
 #' 
+#' @export
 #' @author Aaron Lun
 activateEnvironment <- function(envpath=NULL) {
     ADD <- function(listing, var) {

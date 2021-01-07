@@ -12,10 +12,10 @@
 #'
 #' @examples
 #' # Setting it to something new:
-#' out <- setCondaPackageDirectory(tempdir())
+#' out <- setCondaPackageDir(tempdir())
 #'
 #' # Setting it back
-#' setCondaPackageDirectory(out)
+#' setCondaPackageDir(out)
 #' 
 #' @export
 setCondaPackageDir <- function(loc) {

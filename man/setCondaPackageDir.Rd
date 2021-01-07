@@ -19,10 +19,10 @@ This should be a non-temporary location as other packages may link to its conten
 }
 \examples{
 # Setting it to something new:
-out <- setCondaPackageDirectory(tempdir())
+out <- setCondaPackageDir(tempdir())
 
 # Setting it back
-setCondaPackageDirectory(out)
+setCondaPackageDir(out)
 
 }
 \author{
