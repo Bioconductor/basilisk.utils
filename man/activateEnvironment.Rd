@@ -5,13 +5,15 @@
 \alias{deactivateEnvironment}
 \title{Activate a Conda environment}
 \usage{
-activateEnvironment(envpath = NULL)
+activateEnvironment(envpath = NULL, loc = getCondaDir())
 
 deactivateEnvironment(listing)
 }
 \arguments{
 \item{envpath}{String containing the path to the Conda environment to activate.
 If \code{NULL}, the base Conda instance at \code{\link{getCondaDir}()} is activated.}
+
+\item{loc}{String containing the path to the root of a conda instance.}
 
 \item{listing}{Named list of strings containing name:value pairs for environment variables,
 typically the output of \code{activateEnvironment}.}

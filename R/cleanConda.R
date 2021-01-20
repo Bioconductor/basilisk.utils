@@ -2,7 +2,7 @@
 #'
 #' Clean the Conda installation to remove unused packages and tarballs.
 #'
-#' @param loc String containing the path to the root of a conda instance or environment.
+#' @param loc String containing the path to the root of a conda instance. 
 #'
 #' @return An integer value indicating whether the cleaning was successful.
 #'
@@ -23,7 +23,7 @@
 #'
 #' @export 
 cleanConda <- function(loc=getCondaDir()) {
-    listing <- activateEnvironment()
+    listing <- activateEnvironment(loc=loc)
     on.exit(deactivateEnvironment(listing))
     system2(getCondaBinary(loc), c("clean", "-ayq"))
 }

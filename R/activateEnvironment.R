@@ -6,6 +6,7 @@
 #' If \code{NULL}, the base Conda instance at \code{\link{getCondaDir}()} is activated.
 #' @param listing Named list of strings containing name:value pairs for environment variables,
 #' typically the output of \code{activateEnvironment}.
+#' @param loc String containing the path to the root of a conda instance. 
 #'
 #' @details
 #' Conda environments generally need to be activated to function properly.
@@ -40,7 +41,7 @@
 #'
 #' @export
 #' @author Aaron Lun
-activateEnvironment <- function(envpath=NULL) {
+activateEnvironment <- function(envpath=NULL, loc=getCondaDir()) {
     ADD <- function(listing, var) {
         previous <- Sys.getenv(var, unset=NA)
         if (!is.na(previous)) {
@@ -67,21 +68,21 @@ activateEnvironment <- function(envpath=NULL) {
     Sys.setenv(PYTHONNOUSERSITE=1)
 
     # Activating the conda environment.
-    output <- .activate_condaenv(output, envpath)
+    output <- .activate_condaenv(output, envpath, loc)
 
     output
 }
 
 #' @importFrom utils getFromNamespace
-.activate_condaenv <- function(listing, envpath) {
+.activate_condaenv <- function(listing, envpath, loc) {
     if (isWindows()) {
-        act.bat <- file.path(getCondaDir(), "condabin", "conda.bat")
+        act.bat <- file.path(loc, "condabin", "conda.bat")
         act.cmd <- c(shQuote(act.bat), "activate")
         if (!is.null(envpath)) {
             act.cmd <- c(act.cmd, shQuote(envpath))
         }
     } else {
-        profile.sh <- file.path(getCondaDir(), "etc", "profile.d", "conda.sh")
+        profile.sh <- file.path(loc, "etc", "profile.d", "conda.sh")
         act.cmd <- c(".", shQuote(profile.sh), "&&", "conda", "activate")
         if (!is.null(envpath)) {
             act.cmd <- c(act.cmd, shQuote(envpath))

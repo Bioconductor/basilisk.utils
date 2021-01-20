@@ -7,7 +7,7 @@
 cleanConda(loc = getCondaDir())
 }
 \arguments{
-\item{loc}{String containing the path to the root of a conda instance or environment.}
+\item{loc}{String containing the path to the root of a conda instance.}
 }
 \value{
 An integer value indicating whether the cleaning was successful.
