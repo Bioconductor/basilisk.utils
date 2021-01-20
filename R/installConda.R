@@ -143,7 +143,7 @@ installConda <- function(installed=TRUE) {
         # ~/.conda/pkgs, and a system install shouldn't touch that.
         old <- setCondaPackageDir(file.path(dest_path, "pkgs"))
         on.exit(setCondaPackageDir(old))
-        cleanConda()
+        cleanConda(dest_path)
     }
 
     success <- TRUE
