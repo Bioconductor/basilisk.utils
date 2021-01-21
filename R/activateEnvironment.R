@@ -97,6 +97,7 @@ activateEnvironment <- function(envpath=NULL, loc=getCondaDir()) {
     con.cmd <- paste(sprintf("con <- socketConnection(port=%i, open='wb', blocking=TRUE)", p),
         "serialize(Sys.getenv(), con)", "close(con)", sep=";")
     act.cmd <- c(act.cmd, "&&", file.path(R.home("bin"), "Rscript"), 
+        "--no-save", "--no-restore", "--no-site-file", "--no-init-file",
         "--default-packages=NULL", "-e", deparse(con.cmd))
 
     soc <- serverSocket(p)
