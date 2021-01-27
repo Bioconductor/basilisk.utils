@@ -77,14 +77,17 @@ activateEnvironment <- function(envpath=NULL, loc=getCondaDir()) {
 .activate_condaenv <- function(listing, envpath, loc) {
     if (isWindows()) {
         act.bat <- file.path(loc, "condabin", "conda.bat")
+        act.bat <- normalizePath(act.bat, mustWork=TRUE)
         act.cmd <- c(shQuote(act.bat), "activate")
         if (!is.null(envpath)) {
             act.cmd <- c(act.cmd, shQuote(envpath))
         }
     } else {
         profile.sh <- file.path(loc, "etc", "profile.d", "conda.sh")
+        profile.sh <- normalizePath(profile.sh, mustWork=TRUE)
         act.cmd <- c(".", shQuote(profile.sh), "&&", "conda", "activate")
         if (!is.null(envpath)) {
+            envpath <- normalizePath(envpath, mustWork=TRUE)
             act.cmd <- c(act.cmd, shQuote(envpath))
         }
     }
