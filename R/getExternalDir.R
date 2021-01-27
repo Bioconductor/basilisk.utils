@@ -37,7 +37,8 @@ getExternalDir <- function() {
     if (is.na(inst_path)) {
         # Using "cache", not "data", as it doesn't have spaces on Mac.
         # Also getting rid of appauthor= and opinion= to keep the path low on Windows.
-        user_cache_dir(appname="basilisk", appauthor=NULL, version=pkg.v, opinion=FALSE)
+        out <- user_cache_dir(appname="basilisk", appauthor=NULL, version=pkg.v, opinion=FALSE)
+        path.expand(out)
     } else {
         file.path(inst_path, pkg.v)
     }
