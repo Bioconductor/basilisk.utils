@@ -1,6 +1,6 @@
 Package: basilisk.utils
-Version: 1.3.7
-Date: 2021-02-03
+Version: 1.3.8
+Date: 2021-04-03
 Title: Basilisk Installation Utilities
 Authors@R: c(person("Aaron", "Lun", role=c("aut", "cre", "cph"),
         email="infinite.monkeys.with.keyboards@gmail.com"))
@@ -8,7 +8,7 @@ Imports:
     utils,
     methods,
     rappdirs,
-    filelock
+    dir.expiry
 Suggests:
     knitr,
     rmarkdown,

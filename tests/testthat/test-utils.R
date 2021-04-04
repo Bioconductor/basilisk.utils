@@ -21,19 +21,16 @@ test_that("special dir.create2 works as expected", {
 })
 
 test_that("lockExternalDir works as expected", {
-    tmp <- tempfile()
-    old <- setVariable("BASILISK_EXTERNAL_DIR", tmp)
+    tmp <- file.path(tempfile(), "1.0.0")
 
-    loc <- lockExternalDir()
-    expect_true(file.exists(file.path(tmp, "00LOCK")))
-    expect_error(lockExternalDir(exclusive=FALSE), "exclusive")
+    loc <- lockExternalDir(tmp)
+    expect_true(file.exists(paste0(tmp, "-00LOCK")))
+    expect_error(lockExternalDir(tmp, exclusive=FALSE), "exclusive")
     expect_null(unlockExternalDir(loc))
 
-    loc1 <- lockExternalDir(exclusive=FALSE)
-    loc2 <- lockExternalDir(exclusive=FALSE)
-    expect_error(lockExternalDir(exclusive=TRUE), "shared")
+    loc1 <- lockExternalDir(tmp, exclusive=FALSE)
+    loc2 <- lockExternalDir(tmp, exclusive=FALSE)
+    expect_error(lockExternalDir(tmp, exclusive=TRUE), "shared")
     unlockExternalDir(loc1)
     unlockExternalDir(loc2)
-
-    setVariable("BASILISK_EXTERNAL_DIR", old)
 })

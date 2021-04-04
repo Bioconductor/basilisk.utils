@@ -5,7 +5,7 @@
 \alias{clearObsoleteDir}
 \title{Clear the external installation directory}
 \usage{
-clearExternalDir()
+clearExternalDir(path = getExternalDir())
 
 clearObsoleteDir(path = getExternalDir())
 }

@@ -43,6 +43,7 @@
 #' print("dummy test to pass BiocCheck")
 #'
 #' @export
+#' @importFrom dir.expiry touchDirectory
 installConda <- function(installed=TRUE) {
     if (!is.na(.get_external_conda())) {
         return(FALSE)
@@ -57,29 +58,27 @@ installConda <- function(installed=TRUE) {
         # this isn't necessary as the R package locks take care of it.
         loc <- lockExternalDir(exclusive=!file.exists(dest_path))
         on.exit(unlockExternalDir(loc))
-    }
 
-    # Do NOT assign the existence of dest_path to a variable for re-use in the
-    # locking call above. We want to recheck existance just in case the
-    # directory was created after waiting to acquire the lock.
-    if (file.exists(dest_path)) {
-        return(FALSE)
-    }
-
-    # If we're assuming that basilisk is installed, and we're using a system
-    # directory, and the conda installation directory is missing, something
-    # is clearly wrong. We check this here instead of in `getCondaDir()` to
-    # avoid throwing after an external install, given that `installConda()`
-    # is usually called before `getCondaDir()`.
-    if (installed && is.system) {
-        stop("conda should have been installed during basilisk installation")
-    }
-
-    # We need to wipe out Conda installations for older versions of basilisk;
-    # we also need to destroy any stale installations and environments for the
-    # current version.
-    if (!useSystemDir() && destroyOldVersions()) {
-        clearExternalDir()
+        # Do NOT assign the existence of dest_path to a variable for re-use in the
+        # locking call above. We want to recheck existance just in case the
+        # directory was created after waiting to acquire the lock.
+        if (file.exists(dest_path)) {
+            touchDirectory(getExternalDir())
+            return(FALSE)
+        }
+    } else {
+        if (!file.exists(dest_path)) {
+            # If we're assuming that basilisk is installed, and we're using a system
+            # directory, and the conda installation directory is missing, something
+            # is clearly wrong. We check this here instead of in `getCondaDir()` to
+            # avoid throwing after an external install, given that `installConda()`
+            # is usually called before `getCondaDir()`.
+            if (installed) {
+                stop("conda should have been installed during basilisk installation")
+            }
+        } else {
+            return(FALSE)
+        }
     }
 
     host <- dirname(dest_path)
@@ -89,7 +88,11 @@ installConda <- function(installed=TRUE) {
     # Destroying the directory upon failure, to avoid difficult interpretations
     # of any remnant installation directories when this function is hit again.
     success <- FALSE
-    on.exit(if (!success) unlink2(dest_path, recursive=TRUE), add=TRUE, after=FALSE)
+    on.exit({
+        if (!success) {
+            unlink2(dest_path, recursive=TRUE)
+        }
+    }, add=TRUE, after=FALSE)
 
     version <- "py37_4.8.3"
     base_url <- "https://repo.anaconda.com/miniconda"
@@ -142,8 +145,12 @@ installConda <- function(installed=TRUE) {
         # specify the directory manually otherwise conda goes looking in
         # ~/.conda/pkgs, and a system install shouldn't touch that.
         old <- setCondaPackageDir(file.path(dest_path, "pkgs"))
-        on.exit(setCondaPackageDir(old))
+        on.exit(setCondaPackageDir(old), add=TRUE, after=FALSE)
         cleanConda(dest_path)
+    } else {
+        # touchDirectory will automatically implement the clearing logic,
+        # so there's no need to explicitly call clearExternalDir here.
+        touchDirectory(getExternalDir())
     }
 
     success <- TRUE
