@@ -73,6 +73,7 @@ activateEnvironment <- function(envpath=NULL, loc=getCondaDir()) {
     output
 }
 
+#' @importFrom methods is
 #' @importFrom utils getFromNamespace
 .activate_condaenv <- function(listing, envpath, loc) {
     if (isWindows()) {
@@ -103,8 +104,16 @@ activateEnvironment <- function(envpath=NULL, loc=getCondaDir()) {
     soc <- serverSocket(p)
     on.exit(close(soc), add=TRUE)
     system(paste(act.cmd, collapse=" "), intern=TRUE)
-    listener <- socketAccept(soc, blocking=TRUE, open = "a+b")
-    on.exit(close(listener), add=TRUE)
+
+    status <- try({
+        listener <- socketAccept(soc, blocking=TRUE, open = "a+b")
+        on.exit(close(listener), add=TRUE)
+    }, silent=TRUE)
+
+    if (is(status, "try-error")) {
+        warning("failed to activate the environment at '", envpath, "'")
+        return(list())
+    }
 
     activated <- unserialize(listener)
     actvar <- activated 
