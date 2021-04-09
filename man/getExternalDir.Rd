@@ -20,7 +20,7 @@ See \code{\link{installConda}} for more details on how old versions of Conda are
 
 If the \code{BASILISK_EXTERNAL_DIR} environment variable is set to some location,
 this will be used instead as the installation directory.
-Setting this variable is occasionally necessary if the default path returned by \code{\link{user_cache_dir}} has spaces;
+Setting this variable is occasionally necessary if the default path returned by \code{\link{R_user_dir}} has spaces;
 or on Windows, if the 260 character limit is exceeded after combining the default path with deeply nested conda paths. 
 
 We assume that the user has read-write access to the external directory.

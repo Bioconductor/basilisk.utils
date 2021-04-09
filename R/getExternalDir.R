@@ -12,7 +12,7 @@
 #'
 #' If the \code{BASILISK_EXTERNAL_DIR} environment variable is set to some location,
 #' this will be used instead as the installation directory.
-#' Setting this variable is occasionally necessary if the default path returned by \code{\link{user_cache_dir}} has spaces;
+#' Setting this variable is occasionally necessary if the default path returned by \code{\link{R_user_dir}} has spaces;
 #' or on Windows, if the 260 character limit is exceeded after combining the default path with deeply nested conda paths. 
 #'
 #' We assume that the user has read-write access to the external directory.
@@ -30,16 +30,12 @@
 #'
 #' @export
 #' @importFrom utils packageVersion
-#' @importFrom rappdirs user_cache_dir 
+#' @importFrom tools R_user_dir
 getExternalDir <- function() {
-    pkg.v <- as.character(packageVersion("basilisk"))
     inst_path <- Sys.getenv("BASILISK_EXTERNAL_DIR", NA)
     if (is.na(inst_path)) {
-        # Using "cache", not "data", as it doesn't have spaces on Mac.
-        # Also getting rid of appauthor= and opinion= to keep the path low on Windows.
-        out <- user_cache_dir(appname="basilisk", appauthor=NULL, version=pkg.v, opinion=FALSE)
-        path.expand(out)
-    } else {
-        file.path(inst_path, pkg.v)
+        inst_path <- R_user_dir("basilisk", "cache")
     }
+    pkg.v <- as.character(packageVersion("basilisk"))
+    file.path(path.expand(inst_path), pkg.v)
 }
