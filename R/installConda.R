@@ -133,7 +133,7 @@ installConda <- function(installed=TRUE) {
         conda.exists <- file.exists(file.path(dest_path, "condabin/conda.bat"))
     }
 
-    python.cmd <- getPythonBinary(dest_path)
+    python.cmd <- path.expand(getPythonBinary(dest_path))
     report <- system2(python.cmd, c("-E", "-c", shQuote("print(1)")), stdout=TRUE, stderr=FALSE)
     if (!conda.exists || report!="1") {
         stop("conda installation failed for an unknown reason")
