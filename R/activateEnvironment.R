@@ -136,9 +136,7 @@ activateEnvironment <- function(envpath=NULL, loc=getCondaDir()) {
     }
 
     actvar <- unserialize(listener)
-    actvar <- as.list(actvar)
     extvar <- Sys.getenv()
-    extvar <- as.list(extvar)
 
     if (isWindows()) {
         # Case insensitive on Windows. Hey, I don't make the rules.
