@@ -74,7 +74,6 @@ activateEnvironment <- function(envpath=NULL, loc=getCondaDir()) {
 }
 
 #' @importFrom methods is
-#' @importFrom utils getFromNamespace
 .activate_condaenv <- function(listing, envpath, loc) {
     if (isWindows()) {
         act.bat <- file.path(loc, "condabin", "conda.bat")
@@ -90,38 +89,54 @@ activateEnvironment <- function(envpath=NULL, loc=getCondaDir()) {
         }
     }
 
-    # Couldn't be bothered to reimplement the stuff in
-    # initDefaultClusterOptions, so here we are.
-    p <- getFromNamespace(x="defaultClusterOptions", "parallel")$port
+    # Most of this is copied from parallel:::initDefaultClusterOptions.
+    # We try several times to acquire the socket with different ports;
+    # hopefully one of those will work.
+    seed <- .GlobalEnv$.Random.seed
+    on.exit({
+        if (is.null(seed)) {
+            rm(".Random.seed", envir = .GlobalEnv, inherits = FALSE)
+        } else {
+            assign(".Random.seed", seed, envir = .GlobalEnv, inherits = FALSE)
+        }
+    }, add=TRUE)
 
-    # Identifying all environment variables after activation.
-    con.cmd <- paste(sprintf("con <- socketConnection(port=%i, open='wb', blocking=TRUE)", p),
-        "serialize(Sys.getenv(), con)", "close(con)", sep=";")
-    act.cmd <- c(act.cmd, "&&", file.path(R.home("bin"), "Rscript"), 
-        "--no-save", "--no-restore", "--no-site-file", "--no-init-file",
-        "--default-packages=NULL", "-e", deparse(con.cmd))
+    success <- FALSE 
+    for (tries in seq_len(10)) {
+        ran1 <- sample.int(.Machine$integer.max - 1L, 1L)/.Machine$integer.max
+        p <- as.integer(11000 + 1000 * ((ran1 + unclass(Sys.time())/300)%%1))
+        soc <- try(serverSocket(p), silent=TRUE) # should fail if the socket is already in use.
+        if (!is(soc, "try-error")) {
+            on.exit(close(soc), add=TRUE)
+            success <- TRUE
+            break;
+        }
+    }
 
-    soc <- serverSocket(p)
-    on.exit(close(soc), add=TRUE)
-    system(paste(act.cmd, collapse=" "), intern=TRUE)
+    if (success) {
+        # Identifying all environment variables after activation.
+        con.cmd <- paste(sprintf("con <- socketConnection(port=%i, open='wb', blocking=TRUE)", p),
+            "serialize(Sys.getenv(), con)", "close(con)", sep=";")
+        act.cmd <- c(act.cmd, "&&", file.path(R.home("bin"), "Rscript"), 
+            "--no-save", "--no-restore", "--no-site-file", "--no-init-file",
+            "--default-packages=NULL", "-e", deparse(con.cmd))
 
-    status <- try({
-        listener <- socketAccept(soc, blocking=TRUE, open = "a+b")
-        on.exit(close(listener), add=TRUE)
-    }, silent=TRUE)
+        system(paste(act.cmd, collapse=" "), intern=TRUE)
 
-    if (is(status, "try-error")) {
+        listener <- try(socketAccept(soc, blocking=TRUE, open = "a+b"), silent=TRUE)
+        success <- !is(listener, "try-error")
+        if (success) {
+            on.exit(close(listener), add=TRUE)
+        }
+    }
+
+    if (!success) {
         warning("failed to activate the environment at '", envpath, "'")
         return(list())
     }
 
-    activated <- unserialize(listener)
-    actvar <- activated 
-    names(actvar) <- names(activated)
-
-    existing <- Sys.getenv()
-    extvar <- existing
-    names(extvar) <- names(existing)
+    actvar <- unserialize(listener)
+    extvar <- Sys.getenv()
 
     if (isWindows()) {
         # Case insensitive on Windows. Hey, I don't make the rules.
