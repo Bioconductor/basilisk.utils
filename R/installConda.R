@@ -94,7 +94,7 @@ installConda <- function(installed=TRUE) {
         }
     }, add=TRUE, after=FALSE)
 
-    version <- "py38_4.11.0"
+    version <- "py38_4.12.0"
     base_url <- "https://repo.anaconda.com/miniconda"
 
     if (isWindows()) {
