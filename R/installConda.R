@@ -172,8 +172,15 @@ installConda <- function(installed=TRUE) {
     }
 
     fname <- file.path(dir, basename(url))
-    if (!file.exists(fname) && download.file(url, fname, mode="wb")) {
-        stop("failed to download the conda installer")
+    if (!file.exists(fname)) {
+        tryCatch({
+            if (download.file(url, fname, mode="wb")) {
+                stop("failed to download the conda installer - check your internet connection or increase 'options(timeout=...)'") 
+            }
+        }, error=function(e) {
+            unlink(fname, force=TRUE)
+            stop(e)
+        })
     }
 
     fname
