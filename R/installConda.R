@@ -94,7 +94,7 @@ installConda <- function(installed=TRUE) {
         }
     }, add=TRUE, after=FALSE)
 
-    version <- "py37_4.8.3"
+    version <- "py38_4.11.0"
     base_url <- "https://repo.anaconda.com/miniconda"
 
     if (isWindows()) {
@@ -112,10 +112,15 @@ installConda <- function(installed=TRUE) {
         Sys.chmod(tmploc, mode = "0755")
         status <- system2(tmploc, inst_args)
 
-    } else {
-        sysname <- if (isMacOSX()) "MacOSX" else "Linux"
-        inst_file <- sprintf("Miniconda3-%s-%s-x86_64.sh", version, sysname)
+    } else if (isMacOSX()) {
+        arch <- if (isMacOSXArm()) "arm64" else "x86_64" 
+        inst_file <- sprintf("Miniconda3-%s-MacOSX-%s.sh", version, arch)
+        tmploc <- .expedient_download(file.path(base_url, inst_file))
+        inst_args <- sprintf(" %s -b -p %s", tmploc, dest_path)
+        status <- system2("bash", inst_args)
 
+    } else {
+        inst_file <- sprintf("Miniconda3-%s-Linux-x86_64.sh", version)
         tmploc <- .expedient_download(file.path(base_url, inst_file))
         inst_args <- sprintf(" %s -b -p %s", tmploc, dest_path)
         status <- system2("bash", inst_args)

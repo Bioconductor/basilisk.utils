@@ -3,17 +3,21 @@
 \name{isWindows}
 \alias{isWindows}
 \alias{isMacOSX}
-\title{Find the operating system}
+\alias{isMacOSXArm}
+\title{Find the operating system or architecture.}
 \usage{
 isWindows()
 
 isMacOSX()
+
+isMacOSXArm()
 }
 \value{
-Logical scalar indicating whether we are on the specified OS.
+Logical scalar indicating whether we are on the specified OS and/or architecture.
 }
 \description{
 Indicate whether we are on Windows or MacOSX.
+For MacOSX, we can also determine if we are on an x86-64 or Arm-based architecture.
 }
 \examples{
 isWindows()
