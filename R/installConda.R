@@ -147,7 +147,7 @@ installConda <- function(installed=TRUE) {
 
     # Installing reticulate into the base basilisk environment, 
     # to enable fallback execution upon GLIBCXX mismatch.
-    if (!noCondaR()) {
+    if (!noCondaR() && !isWindows() && !isMacOSX()) {
         conda_install(dest_path, packages="r-reticulate=1.26")
     }
 
