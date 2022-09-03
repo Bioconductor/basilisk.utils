@@ -44,7 +44,7 @@
 #'
 #' @export
 #' @importFrom dir.expiry touchDirectory
-#' @importFrom reticulate conda_install
+#' @importFrom reticulate conda_create
 installConda <- function(installed=TRUE) {
     if (!is.na(.get_external_conda())) {
         return(FALSE)
@@ -148,7 +148,7 @@ installConda <- function(installed=TRUE) {
     # Installing reticulate into the base basilisk environment, 
     # to enable fallback execution upon GLIBCXX mismatch.
     if (!noCondaR() && !isWindows() && !isMacOSX()) {
-        conda_install(dest_path, packages="r-reticulate=1.26")
+        conda_create("mini-R", conda=getCondaBinary(dest_path), packages="r-reticulate=1.26")
     }
 
     if (is.system) {
