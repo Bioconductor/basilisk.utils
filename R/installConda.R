@@ -146,7 +146,7 @@ installConda <- function(installed=TRUE) {
 
     # Installing reticulate into the base basilisk environment, 
     # to enable fallback execution upon GLIBCXX mismatch.
-    if (is.system && !noCondaR()) {
+    if (is.system && !noFallbackR()) {
         .install_fallback_r(dest_path)
     }
 
