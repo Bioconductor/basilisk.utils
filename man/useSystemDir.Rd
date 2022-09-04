@@ -17,7 +17,7 @@ The default value is \code{FALSE} to avoid problems with position-dependent code
 This can be changed by setting \code{BASILISK_USE_SYSTEM_DIR} environment variable to \code{"1"}.
 }
 \seealso{
-\code{\link{getCondaDir}}, where this function is used.
+\code{\link{installConda}} and \code{\link{getCondaDir}}, where this function is used.
 }
 \author{
 Aaron Lun

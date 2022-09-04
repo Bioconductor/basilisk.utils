@@ -11,7 +11,7 @@
 #' @author Aaron Lun
 #'
 #' @seealso
-#' \code{\link{getCondaDir}}, where this function is used.
+#' \code{\link{installConda}} and \code{\link{getCondaDir}}, where this function is used.
 #'
 #' @export
 useSystemDir <- function() {
