@@ -8,9 +8,9 @@ Imports:
     utils,
     methods,
     tools,
-    dir.expiry,
-    reticulate
+    dir.expiry
 Suggests:
+    reticulate,
     knitr,
     rmarkdown,
     BiocStyle,
