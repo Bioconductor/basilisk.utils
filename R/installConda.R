@@ -144,6 +144,12 @@ installConda <- function(installed=TRUE) {
         stop("conda installation failed for an unknown reason")
     }
 
+    # Installing reticulate into the base basilisk environment, 
+    # to enable fallback execution upon GLIBCXX mismatch.
+    if (is.system && !noFallbackR()) {
+        .install_fallback_r(dest_path)
+    }
+
     if (is.system) {
         # Cleaning the system install, because we're never going to use the
         # cache again; clients use their own cache directories. We need to
