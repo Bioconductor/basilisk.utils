@@ -11,12 +11,16 @@
 #' also borrowing code from \pkg{reticulate}'s \code{install_miniconda} for correct Windows installation.
 #' It downloads and runs a Miniconda installer to create a dedicated Conda instance that is managed by \pkg{basilisk},
 #' separate from other instances that might be available on the system.
-#' Currently, we use version 4.12.0 of the Miniconda3 installer.
 #'
 #' The installer itself is cached to avoid re-downloading it when, e.g., re-installing \pkg{basilisk} across separate R sessions.
 #' Users can obtain/delete the cached installer by looking at the contents of the parent directory of \code{\link{getExternalDir}}.
 #' This caching behavior is disabled for system installations (see \code{\link{useSystemDir}}), which touch nothing except the system directories;
 #' in such cases, only repeated installation attempts in the same R session will re-use the same installer.
+#'
+#' Currently, we use version 4.12.0 of the Miniconda3 installer, which also comes with Python 3.8.
+#' Users can change this by setting the \code{BASILISK_MINICONDA_VERSION} environment variable, e.g., to \code{"py38_4.11.0"}.
+#' Any change should be done with a great deal of caution, typically due to some system-specific problem with a particular Miniconda version.
+#' If it must be done, users should try to stick to the same Python version.
 #'
 #' @section Destruction of old instances:
 #' Whenever \code{installConda} is re-run and \code{BASILISK_USE_SYSTEM_DIR} is not set, 
@@ -100,7 +104,7 @@ installConda <- function(installed=TRUE) {
         }
     }, add=TRUE, after=FALSE)
 
-    version <- "py38_4.12.0"
+    version <- Sys.getenv("BASILISK_MINICONDA_VERSION", "py38_4.12.0")
     base_url <- "https://repo.anaconda.com/miniconda"
 
     if (isWindows()) {
