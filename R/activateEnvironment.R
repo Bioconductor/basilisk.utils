@@ -121,12 +121,15 @@ activateEnvironment <- function(envpath=NULL, loc=getCondaDir()) {
             "--no-save", "--no-restore", "--no-site-file", "--no-init-file",
             "--default-packages=NULL", "-e", deparse(con.cmd))
 
-        system(paste(act.cmd, collapse=" "), intern=TRUE)
+        out <- system(paste(act.cmd, collapse=" "), intern=TRUE)
+        status <- attr(out, "status")
 
-        listener <- try(socketAccept(soc, blocking=TRUE, open = "a+b"), silent=TRUE)
-        success <- !is(listener, "try-error")
-        if (success) {
-            on.exit(close(listener), add=TRUE)
+        if (is.null(status) || isTRUE(status == 0)) {
+            listener <- try(socketAccept(soc, blocking=TRUE, open = "a+b"), silent=TRUE)
+            success <- !is(listener, "try-error")
+            if (success) {
+                on.exit(close(listener), add=TRUE)
+            }
         }
     }
 

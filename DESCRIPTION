@@ -1,6 +1,6 @@
 Package: basilisk.utils
-Version: 1.9.4
-Date: 2022-09-18
+Version: 1.9.5
+Date: 2022-12-04
 Title: Basilisk Installation Utilities
 Authors@R: c(person("Aaron", "Lun", role=c("aut", "cre", "cph"),
         email="infinite.monkeys.with.keyboards@gmail.com"))
