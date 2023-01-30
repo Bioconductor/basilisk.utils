@@ -10,6 +10,7 @@
 #' @examples
 #' isWindows()
 #' isMacOSX()
+#' isLinux()
 #' @export
 isWindows <- function() {
     .Platform$OS.type=="windows" 
@@ -24,5 +25,17 @@ isMacOSX <- function() {
 #' @export
 #' @rdname isWindows
 isMacOSXArm <- function() {
-    grepl("^arm", Sys.info()[["machine"]])
+    isMacOSX() && grepl("^arm", Sys.info()[["machine"]])
+}
+
+#' @export
+#' @rdname isWindows
+isLinux <- function() {
+    Sys.info()[["sysname"]] == "Linux"
+}
+
+#' @export
+#' @rdname isWindows
+isLinuxAarch64 <- function() {
+    isLinux() && Sys.info()[["machine"]] == "aarch64"
 }
