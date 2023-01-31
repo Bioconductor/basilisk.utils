@@ -23,7 +23,7 @@ Logical scalar indicating whether we are on the specified OS and/or architecture
 }
 \description{
 Indicate whether we are on Windows or MacOSX.
-For MacOSX, we can also determine if we are on an x86-64 or Arm-based architecture.
+For MacOSX and Linux, we can also determine if we are on an x86-64 or Arm-based architecture.
 }
 \examples{
 isWindows()
