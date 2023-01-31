@@ -2,6 +2,10 @@
 \title{basilisk.utils News}
 \encoding{UTF-8}
 
+\section{Version 1.12.0}{\itemize{
+\item Added Arm64 support for Linux.
+}}
+
 \section{Version 1.4.0}{\itemize{
 \item Avoid caching the installer when performing a system installation in \code{installConda()}.
 Otherwise, cache in the external directory to avoid requiring/polluting \pkg{BiocFileCache}'s cache.

@@ -25,5 +25,5 @@ Description:
     - or, heaven forbid, end-users! - will need to interact with this package
     directly; they should be using the basilisk package instead.
 License: GPL-3
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
 VignetteBuilder: knitr
