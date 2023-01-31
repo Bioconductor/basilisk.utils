@@ -130,7 +130,8 @@ installConda <- function(installed=TRUE) {
         status <- system2("bash", inst_args)
 
     } else {
-        inst_file <- sprintf("Miniconda3-%s-Linux-x86_64.sh", version)
+        arch <- if (isLinuxAarch64()) "aarch64" else "x86_64"
+        inst_file <- sprintf("Miniconda3-%s-Linux-%s.sh", version, arch)
         tmploc <- .expedient_download(file.path(base_url, inst_file))
         inst_args <- sprintf(" %s -b -p %s", tmploc, dest_path)
         status <- system2("bash", inst_args)
