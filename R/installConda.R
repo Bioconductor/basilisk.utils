@@ -17,7 +17,7 @@
 #' This caching behavior is disabled for system installations (see \code{\link{useSystemDir}}), which touch nothing except the system directories;
 #' in such cases, only repeated installation attempts in the same R session will re-use the same installer.
 #'
-#' Currently, we use version 4.12.0 of the Miniconda3 installer, which also comes with Python 3.8.
+#' Currently, we use version 23.3.1-0 of the Miniconda3 installer, which also comes with Python 3.10.
 #' Users can change this by setting the \code{BASILISK_MINICONDA_VERSION} environment variable, e.g., to \code{"py38_4.11.0"}.
 #' Any change should be done with a great deal of caution, typically due to some system-specific problem with a particular Miniconda version.
 #' If it must be done, users should try to stick to the same Python version.
@@ -104,7 +104,7 @@ installConda <- function(installed=TRUE) {
         }
     }, add=TRUE, after=FALSE)
 
-    version <- Sys.getenv("BASILISK_MINICONDA_VERSION", "py38_4.12.0")
+    version <- Sys.getenv("BASILISK_MINICONDA_VERSION", "py310_23.3.1-0")
     base_url <- "https://repo.anaconda.com/miniconda"
 
     if (isWindows()) {
