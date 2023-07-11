@@ -104,7 +104,7 @@ installConda <- function(installed=TRUE) {
         }
     }, add=TRUE, after=FALSE)
 
-    version <- Sys.getenv("BASILISK_MINICONDA_VERSION", "py310_23.3.1-0")
+    version <- Sys.getenv("BASILISK_MINICONDA_VERSION", "py310_23.5.0-3")
     base_url <- "https://repo.anaconda.com/miniconda"
 
     if (isWindows()) {
