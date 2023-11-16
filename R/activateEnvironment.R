@@ -4,18 +4,24 @@
 #'
 #' @param envpath String containing the path to the Conda environment to activate.
 #' If \code{NULL}, the base Conda instance at \code{\link{getCondaDir}()} is activated.
+#' @param full.activation Logical scalar indicating whether the
+#' \code{conda activate} command should be run on the environment.
+#' Default is \code{NA}, which means \code{TRUE} on Windows and \code{FALSE}
+#' anywhere else.
+#' @param loc String containing the path to the root of a conda instance.
 #' @param listing Named list of strings containing name:value pairs for environment variables,
 #' typically the output of \code{activateEnvironment}.
-#' @param loc String containing the path to the root of a conda instance. 
 #'
 #' @details
-#' Conda environments generally need to be activated to function properly.
+#' Conda environments generally need to be activated with the
+#' \code{conda activate} command to function properly.
 #' This is especially relevant on Windows where the \code{"PATH"} variable needs to be modified for the DLL search.
-#' The \code{.activateEnvironment} function mimics the effect of activation
-#' by modifying environment variables in the current R session.
-#' This can be reversed by \code{.deactivateEnvironment} once the Conda environment is no longer in use.
+#' When performing full activation, the \code{activateEnvironment} function
+#' mimics the effect of the \code{conda activate} command by modifying
+#' environment variables in the current R session.
+#' This can be reversed by \code{deactivateEnvironment} once the Conda environment is no longer in use.
 #'
-#' The \code{.activateEnvironment} function will also unset a few bothersome environment variables:
+#' The \code{activateEnvironment} function will also unset a few bothersome environment variables:
 #' \itemize{
 #' \item \code{"PYTHONPATH"}: to avoid compromising the version guarantees 
 #' if \pkg{reticulate}'s \code{import} is allowed to search other locations beyond the specified Conda environment.
@@ -41,7 +47,10 @@
 #'
 #' @export
 #' @author Aaron Lun
-activateEnvironment <- function(envpath=NULL, loc=getCondaDir()) {
+activateEnvironment <- function(envpath=NULL, full.activation=NA, loc=getCondaDir()) {
+    full.activation <- isTRUE(full.activation) ||
+                       (isWindows() && !isFALSE(full.activation))
+
     ADD <- function(listing, var) {
         previous <- Sys.getenv(var, unset=NA)
         if (!is.na(previous)) {
@@ -67,8 +76,10 @@ activateEnvironment <- function(envpath=NULL, loc=getCondaDir()) {
     output <- ADD(output, "PYTHONNOUSERSITE")
     Sys.setenv(PYTHONNOUSERSITE=1)
 
-    # Activating the conda environment.
-    output <- .activate_condaenv(output, envpath, loc)
+    if (full.activation) {
+        # Activating the conda environment.
+        output <- .activate_condaenv(output, envpath, loc)
+    }
 
     output
 }
