@@ -5,13 +5,18 @@
 \alias{deactivateEnvironment}
 \title{Activate a Conda environment}
 \usage{
-activateEnvironment(envpath = NULL, loc = getCondaDir())
+activateEnvironment(envpath = NULL, full.activation = NA, loc = getCondaDir())
 
 deactivateEnvironment(listing)
 }
 \arguments{
 \item{envpath}{String containing the path to the Conda environment to activate.
 If \code{NULL}, the base Conda instance at \code{\link{getCondaDir}()} is activated.}
+
+\item{full.activation}{Logical scalar indicating whether the
+\code{conda activate} command should be run on the environment.
+Default is \code{NA}, which means \code{TRUE} on Windows and \code{FALSE}
+anywhere else.}
 
 \item{loc}{String containing the path to the root of a conda instance.}
 
@@ -30,13 +35,12 @@ It returns \code{NULL} invisibly.
 Mimic the (de)activation of a Conda environment by modifying environment variables in the current R process.
 }
 \details{
-Conda environments generally need to be activated to function properly.
+Conda environments generally need to be activated with the \code{conda activate} command to function properly.
 This is especially relevant on Windows where the \code{"PATH"} variable needs to be modified for the DLL search.
-The \code{.activateEnvironment} function mimics the effect of activation
-by modifying environment variables in the current R session.
-This can be reversed by \code{.deactivateEnvironment} once the Conda environment is no longer in use.
+When performing full activation, the \code{activateEnvironment} function mimics the effect \code{conda activate} by modifying environment variables in the current R session.
+This can be reversed by \code{deactivateEnvironment} once the Conda environment is no longer in use.
 
-The \code{.activateEnvironment} function will also unset a few bothersome environment variables:
+The \code{activateEnvironment} function will also unset a few bothersome environment variables:
 \itemize{
 \item \code{"PYTHONPATH"}: to avoid compromising the version guarantees 
 if \pkg{reticulate}'s \code{import} is allowed to search other locations beyond the specified Conda environment.
