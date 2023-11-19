@@ -35,12 +35,9 @@ It returns \code{NULL} invisibly.
 Mimic the (de)activation of a Conda environment by modifying environment variables in the current R process.
 }
 \details{
-Conda environments generally need to be activated with the
-\code{conda activate} command to function properly.
+Conda environments generally need to be activated with the \code{conda activate} command to function properly.
 This is especially relevant on Windows where the \code{"PATH"} variable needs to be modified for the DLL search.
-When performing full activation, the \code{activateEnvironment} function
-mimics the effect of the \code{conda activate} command by modifying
-environment variables in the current R session.
+When performing full activation, the \code{activateEnvironment} function mimics the effect \code{conda activate} by modifying environment variables in the current R session.
 This can be reversed by \code{deactivateEnvironment} once the Conda environment is no longer in use.
 
 The \code{activateEnvironment} function will also unset a few bothersome environment variables:
