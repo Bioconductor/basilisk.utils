@@ -104,7 +104,7 @@ installConda <- function(installed=TRUE) {
         }
     }, add=TRUE, after=FALSE)
 
-    version <- Sys.getenv("BASILISK_MINICONDA_VERSION", "py39_4.12.0")
+    version <- Sys.getenv("BASILISK_MINICONDA_VERSION", "py311_23.11.0-2") # VJC 1/16/2024
     base_url <- "https://repo.anaconda.com/miniconda"
 
     if (isWindows()) {
