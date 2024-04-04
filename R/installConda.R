@@ -104,14 +104,21 @@ installConda <- function(installed=TRUE) {
         }
     }, add=TRUE, after=FALSE)
 
-    version <- Sys.getenv("BASILISK_MINICONDA_VERSION", "py39_4.12.0")
-    base_url <- "https://repo.anaconda.com/miniconda"
+    if (useMambaForge()) {
+        prefix <- "Mambaforge"
+        version <- Sys.getenv("BASILISK_MAMBAFORGE_VERSION", "24.1.2-0")
+        base_url <- paste0("https://github.com/conda-forge/miniforge/releases/download/", version)
+    } else {
+        prefix <- "Miniconda3"
+        version <- Sys.getenv("BASILISK_MINICONDA_VERSION", "py39_4.12.0")
+        base_url <- "https://repo.anaconda.com/miniconda"
+    }
 
     if (isWindows()) {
         if (.Machine$sizeof.pointer != 8) {
             stop("Windows 32-bit architectures not supported by basilisk")
         }
-        inst_file <- sprintf("Miniconda3-%s-Windows-x86_64.exe", version)
+        inst_file <- sprintf("%s-%s-Windows-x86_64.exe", prefix, version)
         tmploc <- .expedient_download(file.path(base_url, inst_file))
 
         # Using the same code as reticulate:::miniconda_installer_run.
@@ -124,14 +131,14 @@ installConda <- function(installed=TRUE) {
 
     } else if (isMacOSX()) {
         arch <- if (isMacOSXArm()) "arm64" else "x86_64" 
-        inst_file <- sprintf("Miniconda3-%s-MacOSX-%s.sh", version, arch)
+        inst_file <- sprintf("%s-%s-MacOSX-%s.sh", prefix, version, arch)
         tmploc <- .expedient_download(file.path(base_url, inst_file))
         inst_args <- sprintf(" %s -b -p %s", tmploc, dest_path)
         status <- system2("bash", inst_args)
 
     } else {
         arch <- if (isLinuxAarch64()) "aarch64" else "x86_64"
-        inst_file <- sprintf("Miniconda3-%s-Linux-%s.sh", version, arch)
+        inst_file <- sprintf("%s-%s-Linux-%s.sh", prefix, version, arch)
         tmploc <- .expedient_download(file.path(base_url, inst_file))
         inst_args <- sprintf(" %s -b -p %s", tmploc, dest_path)
         status <- system2("bash", inst_args)
