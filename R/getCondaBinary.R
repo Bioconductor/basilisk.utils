@@ -18,8 +18,7 @@
 #' @name getBinaries
 #' @export
 getCondaBinary <- function(loc) {
-    cmd <- if (useMambaForge()) "mamba" else "conda"
-    suffix <- if (isWindows()) file.path("Scripts", paste0(cmd, ".exe")) else file.path("bin", cmd)
+    suffix <- if (isWindows()) "Scripts/conda.exe" else "bin/conda"
 
     if (missing(loc)) suffix else file.path(loc, suffix)
 }

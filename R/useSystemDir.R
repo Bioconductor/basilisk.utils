@@ -62,25 +62,3 @@ destroyOldVersions <- function() {
 noFallbackR <- function() {
     identical(Sys.getenv("BASILISK_NO_FALLBACK_R", NA), "1")
 }
-
-#' Use Mamba-forge instead of Miniconda?
-#'
-#' Should we use Mamba-forge instead of Miniconda?
-#' The former is fully open-source and is more amenable for commercial environments.
-#'
-#' @details
-#' The default value is \code{FALSE} for backwards compatibility.
-#' This can be changed by setting \code{BASILISK_USE_MAMBAFORGE} environment variable to \code{"1"}.
-#' 
-#' @return Logical scalar providing an answer to the above.
-#'
-#' @author Aaron Lun
-#'
-#' @seealso
-#' \url{https://github.com/conda-forge/miniforge}, for more details.
-#'
-#' @export
-useMambaForge <- function() {
-    identical(Sys.getenv("BASILISK_USE_MAMBAFORGE", NA), "1")
-}
-

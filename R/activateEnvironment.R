@@ -83,22 +83,14 @@ activateEnvironment <- function(envpath=NULL, full.activation=NA, loc=getCondaDi
 #' @importFrom methods is
 .activate_condaenv <- function(listing, envpath, loc) {
     if (isWindows()) {
-        # TODO: figure out what Mamba needs here.
         act.bat <- file.path(loc, "condabin", "conda.bat")
         act.cmd <- c(shQuote(act.bat), "activate")
         if (!is.null(envpath)) {
             act.cmd <- c(act.cmd, shQuote(envpath))
         }
     } else {
-        profile.dir <- file.path(loc, "etc", "profile.d")
-
-        act.cmd <- c(".", shQuote(file.path(profile.dir, "conda.sh")))
-        if (useMambaForge()) {
-            act.cmd <- c(act.cmd, "&&", ".", shQuote(file.path(profile.dir, "mamba.sh")), "&&", "mamba", "activate")
-        } else {
-            act.cmd <- c(act.cmd, "&&", "conda", "activate")
-        }
-
+        profile.sh <- file.path(loc, "etc", "profile.d", "conda.sh")
+        act.cmd <- c(".", shQuote(profile.sh), "&&", "conda", "activate")
         if (!is.null(envpath)) {
             act.cmd <- c(act.cmd, shQuote(envpath))
         }
