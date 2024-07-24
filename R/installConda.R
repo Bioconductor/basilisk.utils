@@ -125,7 +125,7 @@ installConda <- function(installed=TRUE) {
         if (!file.exists(parent)) {
             dir.create2(parent)
         }
-        sanitized_path <- gsub("/", "\\\\", dest_path)
+        sanitized_path <- gsub("/", "\\\\", dest_path) # Windows installer doesn't like forward slashes.
 
         inst_args <- c("/InstallationType=JustMe", "/RegisterPython=0", "/S", sprintf("/D=%s", sanitized_path))
         Sys.chmod(tmploc, mode = "0755")
