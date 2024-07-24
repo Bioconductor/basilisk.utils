@@ -34,7 +34,18 @@
 getExternalDir <- function() {
     inst_path <- Sys.getenv("BASILISK_EXTERNAL_DIR", NA)
     if (is.na(inst_path)) {
-        inst_path <- R_user_dir("basilisk", "cache")
+        if (isWindows()) {
+            # The Windows Miniforge3 installer (at least, as of 24.3.0-0)
+            # doesn't allow paths longer than 46 characters, so just throw it
+            # in the user's home directory and hope for the best.
+            inst_path <- Sys.getenv("userprofile")
+            if (basename(inst_path) == "Documents") {
+                inst_path <- dirname(inst_path)
+            }
+            inst_path <- file.path(inst_path, ".basilisk")
+        } else {
+            inst_path <- R_user_dir("basilisk", "cache")
+        }
     }
     pkg.v <- as.character(packageVersion("basilisk"))
     file.path(path.expand(inst_path), pkg.v)

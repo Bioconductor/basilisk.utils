@@ -2,6 +2,13 @@
 \title{basilisk.utils News}
 \encoding{UTF-8}
 
+\section{Version 1.18.0}{\itemize{
+\item Switch to the latest Miniforge installer (24.3.0-0) by default.
+This is preconfigured to use the conda-forge channel and avoids issues with the non-FOSS licensing of the Anaconda repositories.
+Users can switch back to the old Miniconda installer by setting the \code{BASILISK_USE_MINIFORGE=0} environment variable,
+but this will likely be deprecated in the next release.
+}}
+
 \section{Version 1.12.0}{\itemize{
 \item Added Arm64 support for Linux.
 }}
