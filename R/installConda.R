@@ -104,9 +104,9 @@ installConda <- function(installed=TRUE) {
         }
     }, add=TRUE, after=FALSE)
 
-    if (identical(Sys.getenv("BASILISK_USE_MINIFORGE", NA), "1")) {
+    if (!identical(Sys.getenv("BASILISK_USE_MINIFORGE", NA), "0")) {
         prefix <- "Miniforge3"
-        version <- Sys.getenv("BASILISK_MINIFORGE_VERSION", "24.1.2-0")
+        version <- Sys.getenv("BASILISK_MINIFORGE_VERSION", "24.3.0-0")
         base_url <- paste0("https://github.com/conda-forge/miniforge/releases/download/", version)
     } else {
         prefix <- "Miniconda3"
