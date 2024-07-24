@@ -121,11 +121,13 @@ installConda <- function(installed=TRUE) {
         inst_file <- sprintf("%s-%s-Windows-x86_64.exe", prefix, version)
         tmploc <- .expedient_download(file.path(base_url, inst_file))
 
-        # Using the same code as reticulate:::miniconda_installer_run.
-        dir.create2(dest_path)
-        inst_args <- c("/InstallationType=JustMe", "/AddToPath=0",
-            "/RegisterPython=0", "/S", "/NoRegistry=1",
-            sprintf("/D=%s", utils::shortPathName(dest_path)))
+        parent <- dirname(dest_path)
+        if (!file.exists(parent)) {
+            dir.create2(parent)
+        }
+        sanitized_path <- gsub("/", "\\\\", dest_path)
+
+        inst_args <- c("/InstallationType=JustMe", "/RegisterPython=0", "/S", sprintf("/D=%s", sanitized_path))
         Sys.chmod(tmploc, mode = "0755")
         status <- system2(tmploc, inst_args)
 
