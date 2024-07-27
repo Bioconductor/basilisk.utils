@@ -7,6 +7,8 @@
 This is preconfigured to use the conda-forge channel and avoids issues with the non-FOSS licensing of the Anaconda repositories.
 Users can switch back to the old Miniconda installer by setting the \code{BASILISK_USE_MINIFORGE=0} environment variable,
 but this will likely be deprecated in the next release.
+
+\item Update the \pkg{reticulate} version in the fallback environment to 1.38.
 }}
 
 \section{Version 1.12.0}{\itemize{
