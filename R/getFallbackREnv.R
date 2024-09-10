@@ -38,6 +38,12 @@ getFallbackREnv <- function() {
 }
 
 .install_fallback_r <- function(path) {
-    reticulate::conda_create("fallback", conda=getCondaBinary(path), packages="r-reticulate=1.38.0")
+    reticulate::conda_create(
+        "fallback",
+        conda=getCondaBinary(path),
+        packages="r-reticulate=1.38.0",
+        channel="conda-forge",
+        additional_create_args="--override-channels",
+        additional_install_args="--override-channels"
+    )
 }
-
