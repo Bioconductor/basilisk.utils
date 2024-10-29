@@ -1,5 +1,5 @@
 Package: basilisk.utils
-Version: 1.17.3
+Version: 1.18.0
 Date: 2024-09-10
 Title: Basilisk Installation Utilities
 Authors@R: c(person("Aaron", "Lun", role=c("aut", "cre", "cph"),
